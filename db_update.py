@@ -1,6 +1,5 @@
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
-import csv
 import sqlite3
 
 register("66Z4aux6QXjcfTS4HqsyxXGyBpfXrrT2a6BUaXxe", 
