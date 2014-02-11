@@ -4,7 +4,7 @@ import time
 
 db = sqlite3.connect("myDBfile.sqlite3")
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(12, GPIO.OUT)
+GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
 
 def pump_sig():
 	cur.execute('''SELECT MoistureLevel
@@ -14,24 +14,28 @@ def pump_sig():
 		''')
 	setting = cur.fetchone()
 
-	cur.execute('''SELECT MoistureLevel
+	cur.execute('''SELECT GnomeZone, MoistureLevel
 		FROM pGnome
 		GROUP BY GnomeZone
 		ORDER BY CollectedTime DESC
+		LIMIT 1
 		''')
 	readings = cur.fetchall()
 
 	for reading in readings:
 		print reading
-		if setting[0] <= reading[0]:
+		if setting[0] <= reading[1]:
 			GPIO.output(12, GPIO.LOW)
 		else:
 			GPIO.output(12, GPIO.HIGH)
+			time.sleep(20)
+			GPIO.output(12, GPIO.LOW)
+			break
 
 cur = db.cursor()
 while True:
 	pump_sig()
-	time.sleep(1)
+	time.sleep(5)
 	
 GPIO.cleanup()
 db.close()

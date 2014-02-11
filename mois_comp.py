@@ -26,6 +26,8 @@ def print_db():
 
 cur = db.cursor()
 
+init_db(cur)
+
 recentSet = MoistureSetting.Query.all().order_by("-createdAt")
 recentOne = recentSet.limit(1)
 

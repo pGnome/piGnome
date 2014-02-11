@@ -8,10 +8,17 @@ register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 class pGnomeTest(Object):
     pass
 
+class MoistureSetting(Object):
+    pass
+
 db = sqlite3.connect("myDBfile.sqlite3")
 
-def update_db():
-	cur.execute('''SELECT *
+def init_setting_db(cur):
+	cur.execute('''CREATE TABLE IF NOT EXIST levelSet
+		(LevelId INTEGER PRIMARY KEY,
+
+def update_db(cur):
+	cur.execute('''SELECT * 
 		FROM pGnome
 		''')
 	for record in cur.fetchall():

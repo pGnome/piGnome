@@ -34,6 +34,5 @@ while True:
 
 
 
-
 print_db()
 db.close()
