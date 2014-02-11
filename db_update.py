@@ -20,10 +20,17 @@ class MoistureSetting(Object):
 
 db = sqlite3.connect("myDBfile.sqlite3")
 
-
-#collecting data from moisture sensors#
+#initialize database#
 def init_data_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
+def init_setting_db(cur):
+	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT)''')
+def init_tables(cur):
+	init_data_db(cur)
+	init_setting_db(cur)
+
+
+#collecting data from moisture sensors#
 
 def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
@@ -49,8 +56,6 @@ def update_remote_db(cur):
 		gnomeScore.save()
 
 #retrieve setting from parse database#
-def init_setting_db(cur):
-	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT)''')
 
 #updating the current moisture level setting
 def collect_db(cur, MoistureLevel, SettingTime):
@@ -73,6 +78,7 @@ def print_db():
 	print cur.fetchall()
 
 cur = db.cursor()
+init_tables(cur)
 
 while True:
 	Timer(1, data_collect, (cur)).start()
