@@ -3,7 +3,7 @@ from parse_rest.datatypes import Object
 import sqlite3
 
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
-		 "o0AtN7gd9eQgPYBiCia202rDYNwYAYsnOcVfCfQ2")
+		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
 class pGnomeTest(Object):
     pass

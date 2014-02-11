@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import sqlite3
+import time
 
 db = sqlite3.connect("myDBfile.sqlite3")
 GPIO.setmode(GPIO.BOARD)
@@ -30,6 +31,7 @@ def pump_sig():
 cur = db.cursor()
 while True:
 	pump_sig()
+	time.sleep(1)
 	
 GPIO.cleanup()
 db.close()
