@@ -4,7 +4,7 @@ db = sqlite3.connect("myDBfile.sqlite3")
 
 
 def pump_sig():
-	cur.execute('''SELECT MoistureLevel 
+	cur.execute('''SELECT MoistureLevel
 		FROM levelSet
 		ORDER BY SettingTime DESC
 		LIMIT 1
@@ -13,7 +13,7 @@ def pump_sig():
 
 	cur.execute('''SELECT MoistureLevel
 		FROM pGnome
-		GROUP BY GnomeName
+		GROUP BY GnomeZone
 		ORDER BY CollectedTime DESC
 		''')
 	readings = cur.fetchall()
@@ -24,11 +24,10 @@ def pump_sig():
 			print 0
 		else:
 			print 1
-		
+
 
 cur = db.cursor()
 
 db.commit()
 pump_sig()
 db.close()
-	

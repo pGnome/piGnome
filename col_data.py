@@ -1,27 +1,39 @@
 import sqlite3
+import serial
+
 from datetime import datetime
 
 db = sqlite3.connect("myDBfile.sqlite3")
 
 def init_db(cur):
-	cur.execute('''CREATE TABLE pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeName TEXT, CollectedTime TEXT)''')
+	cur.execute('''CREATE TABLE pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
 
-def populate_db(cur, MoistureLevel, GnomeName):
+def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
-		(RecordId, MoistureLevel, GnomeName, CollectedTime)
-		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeName, datetime.now()))
+		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
+		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
 	print '1'
 
 def print_db():
-	cur.execute('''SELECT * 
+	cur.execute('''SELECT *
 		FROM pGnome
 		''')
 	print cur.fetchall()
 
 cur = db.cursor()
 init_db(cur)
-populate_db(cur, 50, 'jono')
-populate_db(cur, 30, 'kris')
-db.commit()
+
+#xbee input
+serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
+
+while True:
+  response = serialport.read(size=1)
+  response.split('#') #zone,reading
+  populate_db(cur, response[1], response[0])
+  db.commit()
+
+
+
+
 print_db()
 db.close()
