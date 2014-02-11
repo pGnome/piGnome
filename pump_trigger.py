@@ -6,7 +6,7 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(12, GPIO.OUT)
 
 def pump_sig():
-	cur.execute('''SELECT MoistureLevel 
+	cur.execute('''SELECT MoistureLevel
 		FROM levelSet
 		ORDER BY SettingTime DESC
 		LIMIT 1
@@ -26,7 +26,6 @@ def pump_sig():
 			GPIO.output(12, GPIO.LOW)
 		else:
 			GPIO.output(12, GPIO.HIGH)
-		
 
 cur = db.cursor()
 while True:
@@ -34,4 +33,3 @@ while True:
 	
 GPIO.cleanup()
 db.close()
-	

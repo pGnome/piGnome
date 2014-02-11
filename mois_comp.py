@@ -2,8 +2,8 @@ from parse_rest.connection import register
 from parse_rest.datatypes import Object
 import sqlite3
 
-register("66Z4aux6QXjcfTS4HqsyxXGyBpfXrrT2a6BUaXxe", 
-		 "ZIJhoPJHoOIIv9ZYC0c76LJS1ZHLeCcNoRq8k3WE")
+register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
+		 "o0AtN7gd9eQgPYBiCia202rDYNwYAYsnOcVfCfQ2")
 
 class moistureSetting(Object):
     pass
@@ -19,7 +19,7 @@ def populate_db(cur, MoistureLevel, SettingTime):
 		VALUES (NULL,?,?)''', (MoistureLevel, SettingTime))
 
 def is_below(cur):
-	cur.execute('''SELECT * 
+	cur.execute('''SELECT *
 		FROM levelSet
 		''')
 	setting = cur.fetchone()
@@ -27,12 +27,12 @@ def is_below(cur):
 		print "The MoistureLevel is below the setting!!!!"
 	else:
 		print "The MoistureLevel is fine."
-	
+
 def print_db():
-	cur.execute('''SELECT * 
+	cur.execute('''SELECT *
 		FROM levelSet
 		''')
-	print cur.fetchall()	
+	print cur.fetchall()
 
 cur = db.cursor()
 
@@ -43,4 +43,3 @@ for ob in recentOne:
 db.commit()
 print_db()
 db.close()
-	
