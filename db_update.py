@@ -18,6 +18,8 @@ def update_db():
 		gnomeScore = pGnomeTest(moisture_level=record[1], gnome_name=record[2], collected_time=record[3])
 		gnomeScore.save()
 
+
+
 cur = db.cursor()
 update_db()
 db.close()

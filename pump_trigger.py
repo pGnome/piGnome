@@ -1,7 +1,9 @@
+import RPi.GPIO as GPIO
 import sqlite3
 
 db = sqlite3.connect("myDBfile.sqlite3")
-
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(12, GPIO.OUT)
 
 def pump_sig():
 	cur.execute('''SELECT MoistureLevel 
@@ -13,7 +15,7 @@ def pump_sig():
 
 	cur.execute('''SELECT MoistureLevel
 		FROM pGnome
-		GROUP BY GnomeName
+		GROUP BY GnomeZone
 		ORDER BY CollectedTime DESC
 		''')
 	readings = cur.fetchall()
@@ -21,14 +23,15 @@ def pump_sig():
 	for reading in readings:
 		print reading
 		if setting[0] <= reading[0]:
-			print 0
+			GPIO.output(12, GPIO.LOW)
 		else:
-			print 1
+			GPIO.output(12, GPIO.HIGH)
 		
 
 cur = db.cursor()
-
-db.commit()
-pump_sig()
+while True:
+	pump_sig()
+	
+GPIO.cleanup()
 db.close()
 	
