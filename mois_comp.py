@@ -5,13 +5,13 @@ import sqlite3
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
-class moistureSetting(Object):
+class MoistureSetting(Object):
     pass
 
 db = sqlite3.connect("myDBfile.sqlite3")
 
 def init_db(cur):
-	cur.execute('''CREATE TABLE levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT)''')
+	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT)''')
 
 def populate_db(cur, MoistureLevel, SettingTime):
 	cur.execute('''INSERT INTO levelSet
@@ -26,10 +26,12 @@ def print_db():
 
 cur = db.cursor()
 
-recentSet = moistureSetting.Query.all().order_by("-createdAt")
+recentSet = MoistureSetting.Query.all().order_by("-createdAt")
 recentOne = recentSet.limit(1)
+
 for ob in recentOne:
-	populate_db(cur,ob.moistureLevel,ob.createdAt)
+	print ob.level
+	populate_db(cur,ob.level,ob.createdAt)
 db.commit()
 print_db()
 db.close()
