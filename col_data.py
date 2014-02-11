@@ -6,7 +6,7 @@ from datetime import datetime
 db = sqlite3.connect("myDBfile.sqlite3")
 
 def init_db(cur):
-	cur.execute('''CREATE TABLE pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
+	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
 
 def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
