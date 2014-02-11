@@ -5,8 +5,6 @@ import time
 from threading import Timer
 from datetime import datetime
 
-s = sched.scheduler(time.time, time.sleep)
-
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
