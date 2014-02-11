@@ -2,10 +2,10 @@ from parse_rest.connection import register
 from parse_rest.datatypes import Object
 import sqlite3
 
-register("66Z4aux6QXjcfTS4HqsyxXGyBpfXrrT2a6BUaXxe", 
-		 "ZIJhoPJHoOIIv9ZYC0c76LJS1ZHLeCcNoRq8k3WE")
+register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
+		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
-class moistureSetting(Object):
+class MoistureSetting(Object):
     pass
 
 db = sqlite3.connect("myDBfile.sqlite3")
@@ -18,29 +18,20 @@ def populate_db(cur, MoistureLevel, SettingTime):
 		(LevelId, MoistureLevel, SettingTime)
 		VALUES (NULL,?,?)''', (MoistureLevel, SettingTime))
 
-def is_below(cur):
-	cur.execute('''SELECT * 
-		FROM levelSet
-		''')
-	setting = cur.fetchone()
-	if setting[1] < 30:
-		print "The MoistureLevel is below the setting!!!!"
-	else:
-		print "The MoistureLevel is fine."
-	
 def print_db():
-	cur.execute('''SELECT * 
+	cur.execute('''SELECT *
 		FROM levelSet
 		''')
-	print cur.fetchall()	
+	print cur.fetchall()
 
 cur = db.cursor()
-
-recentSet = moistureSetting.Query.all().order_by("-createdAt")
+init_db(cur)
+recentSet = MoistureSetting.Query.all().order_by("-createdAt")
 recentOne = recentSet.limit(1)
+
 for ob in recentOne:
-	populate_db(cur,ob.moistureLevel,ob.createdAt)
+	print ob.level
+	populate_db(cur,ob.level,ob.createdAt)
 db.commit()
 print_db()
 db.close()
-	
