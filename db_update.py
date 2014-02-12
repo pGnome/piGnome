@@ -68,7 +68,7 @@ init_tables(cur)
 
 
 count = 0
-while count < 10:
+while count < 100:
 	data_collect(cur)
 	moisture_setting(cur)
 	time.sleep(1)
