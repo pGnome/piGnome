@@ -37,6 +37,7 @@ def data_collect(cur):
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=4)
   	info = response.split('#') #zone,reading
+	print info
 	if len(info) == 2:
   		insert_db(cur, info[1], info[0])
 
@@ -78,7 +79,6 @@ def print_db(cur):
 
 cur = db.cursor()
 init_tables(cur)
-
 
 count = 0
 while count < 100:

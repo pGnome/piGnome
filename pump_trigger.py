@@ -14,11 +14,9 @@ def pump_sig(cur):
 		LIMIT 1
 		''')
 	setting = cur.fetchone()
-	cur.execute('''SELECT MoistureLevel, GnomeZone
+	cur.execute('''SELECT MoistureLevel, GnomeZone, MAX(RecordId)
 		FROM pGnome
 		GROUP BY GnomeZone
-		ORDER BY CollectedTime DESC
-		LIMIT 1
 		''')
 	readings = cur.fetchall()
 	print readings
