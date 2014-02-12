@@ -42,7 +42,8 @@ def data_collect(cur):
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=1)
   	response.split('#') #zone,reading
-  	insert_db(cur, response[1], response[0])
+  	print response
+  	#insert_db(cur, response[1], response[0])
 
 #pushing data from local database to parse database#
 def update_remote_db(cur):
