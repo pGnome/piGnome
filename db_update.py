@@ -50,12 +50,12 @@ def row_count (cur):
 		''')
 	return cur.fetchall()[0]
 #insert
-def insert_db(cur, MoistureLevel, SettingTime):
+def insert_setting_db(cur, MoistureLevel, SettingTime):
 	cur.execute('''INSERT INTO levelSet
 		(LevelId, MoistureLevel, SettingTime)
 		VALUES (NULL,?,?)''', (MoistureLevel, SettingTime))
 #update
-def update_db(cur, MoistureLevel, SettingTime):
+def update_setting_db(cur, MoistureLevel, SettingTime):
 	cur.execute('''UPDATE levelSet
 		SET MoistureLevel = ?, SettingTime = ?
 		WHERE LevelId = 1''', (MoistureLevel, SettingTime))
@@ -65,9 +65,9 @@ def moisture_setting(cur):
 
 	for ob in recentOne:
 		if row_count(cur) == 0:
-			insert_db(cur,ob.level,ob.createdAt)
+			insert_setting_db(cur,ob.level,ob.createdAt)
 		else:
-			update_db(cur,ob.level,ob.createdAt)
+			update_setting_db(cur,ob.level,ob.createdAt)
 
 #print out current data table#
 def print_db(cur):
