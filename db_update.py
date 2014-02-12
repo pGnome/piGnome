@@ -1,5 +1,6 @@
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
+import serial
 import sqlite3
 import time
 from threading import Timer
@@ -34,7 +35,6 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
 		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
-	print '1'
 
 def data_collect(cur):
 	init_data_db(cur)
@@ -79,11 +79,11 @@ cur = db.cursor()
 init_tables(cur)
 
 while True:
-	Timer(1, data_collect, (cur)).start()
-	Timer(1, moisture_setting, (cur)).start()
+	data_collect(cur)
+	moisture_setting(cur)
+	time.sleep(1)
 	Timer(60, update_remote_db, (cur)).start()
+	print_db()
 
 db.commit()
-
-print_db()
 db.close()
