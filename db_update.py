@@ -37,13 +37,12 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
 
 def data_collect(cur):
-	init_data_db(cur)
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
-	response = serialport.read(size=1)
-  	response.split('#') #zone,reading
-  	print response
-  	#insert_db(cur, response[1], response[0])
+	response = serialport.read(size=4)
+  	info = response.split('#') #zone,reading
+	if len(info) == 2:
+  		insert_db(cur, info[1], info[0])
 
 #pushing data from local database to parse database#
 def update_remote_db(cur):
@@ -62,7 +61,6 @@ def collect_db(cur, MoistureLevel, SettingTime):
 		(LevelId, MoistureLevel, SettingTime)
 		VALUES (NULL,?,?)''', (MoistureLevel, SettingTime))
 def moisture_setting(cur):
-	init_setting_db(cur)
 	recentSet = MoistureSetting.Query.all().order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 
@@ -70,21 +68,26 @@ def moisture_setting(cur):
 		collect_db(cur,ob.level,ob.createdAt)
 
 
-def print_db():
+def print_db(cur):
 	cur.execute('''SELECT *
 		FROM pGnome
 		''')
 	print cur.fetchall()
+	print "inside print statemen"
 
 cur = db.cursor()
 init_tables(cur)
 
-while True:
+
+count = 0
+while count < 20:
 	data_collect(cur)
 	moisture_setting(cur)
 	time.sleep(1)
+	print_db(cur)
 	Timer(60, update_remote_db, (cur)).start()
-	print_db()
+	count += 1
+
 
 db.commit()
 db.close()
