@@ -3,6 +3,7 @@ import sqlite3
 import time
 
 db = sqlite3.connect("myDBfile.sqlite3")
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
 
