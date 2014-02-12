@@ -21,7 +21,7 @@ def update_remote_db(cur):
 		FROM pGnome
 		''')
 	for record in cur.fetchall():
-		gnomeScore = Moisture(level=record[1], gnomeZone=record[2], collectedTime=record[3])
+		gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
 		gnomeScore.save()
 
 cur = db.cursor()
