@@ -61,7 +61,11 @@ def print_db(cur):
 		FROM pGnome
 		''')
 	print cur.fetchall()
-	print "inside print statemen"
+	print "-------------"
+	cur.execute('''SELECT *
+		FROM levelSet
+		''')
+	print cur.fetchall()
 
 cur = db.cursor()
 init_tables(cur)
