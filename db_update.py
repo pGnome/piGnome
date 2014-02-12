@@ -17,9 +17,9 @@ db = sqlite3.connect("myDBfile.sqlite3")
 
 #initialize database#
 def init_data_db(cur):
-	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TIMESTAMP)''')
+	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
 def init_setting_db(cur):
-	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TIMESTAMP)''')
+	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT)''')
 def init_tables(cur):
 	init_data_db(cur)
 	init_setting_db(cur)
@@ -37,6 +37,7 @@ def data_collect(cur):
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=4)
   	info = response.split('#') #zone,reading
+	print info
 	if len(info) == 2:
   		insert_db(cur, info[1], info[0])
 
