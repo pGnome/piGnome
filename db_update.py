@@ -3,16 +3,12 @@ from parse_rest.datatypes import Object
 import serial
 import sqlite3
 import time
-from threading import Timer
 from datetime import datetime
 
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
 #parse tables
-#mositure history table
-class Moisture(Object):
-    pass
 #moisture setting table
 class MoistureSetting(Object):
     pass
@@ -44,14 +40,6 @@ def data_collect(cur):
 	if len(info) == 2:
   		insert_db(cur, info[1], info[0])
 
-#pushing data from local database to parse database#
-def update_remote_db(cur):
-	cur.execute('''SELECT *
-		FROM pGnome
-		''')
-	for record in cur.fetchall():
-		gnomeScore = pGnomeTest(level=record[1], gnomeZone=record[2], collectedTime=record[3])
-		gnomeScore.save()
 
 #retrieve setting from parse database#
 
@@ -67,7 +55,7 @@ def moisture_setting(cur):
 	for ob in recentOne:
 		collect_db(cur,ob.level,ob.createdAt)
 
-
+#print out current data table#
 def print_db(cur):
 	cur.execute('''SELECT *
 		FROM pGnome
@@ -80,12 +68,11 @@ init_tables(cur)
 
 
 count = 0
-while count < 20:
+while count < 10:
 	data_collect(cur)
 	moisture_setting(cur)
 	time.sleep(1)
 	print_db(cur)
-	Timer(60, update_remote_db, (cur)).start()
 	count += 1
 
 
