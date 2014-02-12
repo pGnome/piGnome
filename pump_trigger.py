@@ -14,7 +14,6 @@ def pump_sig(cur):
 		LIMIT 1
 		''')
 	setting = cur.fetchone()
-	print setting
 	cur.execute('''SELECT MoistureLevel, GnomeZone
 		FROM pGnome
 		GROUP BY GnomeZone
@@ -24,15 +23,10 @@ def pump_sig(cur):
 	readings = cur.fetchall()
 	print readings
 	for reading in readings:
-		print reading
 		if setting[0] <= reading[0]:
 			GPIO.output(12, GPIO.LOW)
-			print "low"
 		else:
 			GPIO.output(12, GPIO.HIGH)
-			print "high"
-			time.sleep(20)
-			GPIO.output(12, GPIO.LOW)
 			break
 
 cur = db.cursor()

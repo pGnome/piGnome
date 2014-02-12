@@ -29,6 +29,7 @@ cur = db.cursor()
 count = 0
 while count < 5:
 	update_remote_db(cur)
+	db.commit()
 	time.sleep(60)
 	count += 1
 

@@ -77,11 +77,10 @@ def print_db(cur):
 	print cur.fetchall()
 
 cur = db.cursor()
-init_tables(cur)
-
 
 count = 0
 while count < 100:
+	init_tables(cur)
 	data_collect(cur)
 	db.commit()
 	moisture_setting(cur)
