@@ -64,7 +64,7 @@ def moisture_setting(cur):
 	recentOne = recentSet.limit(1)
 
 	for ob in recentOne:
-		if row_count(cur) == 0:
+		if row_count(cur)[0] == 0:
 			insert_setting_db(cur,ob.level,ob.createdAt)
 		else:
 			update_setting_db(cur,ob.level,ob.createdAt)
@@ -83,7 +83,9 @@ init_tables(cur)
 count = 0
 while count < 100:
 	data_collect(cur)
+	db.commit()
 	moisture_setting(cur)
+	db.commit()
 	time.sleep(1)
 	print_db(cur)
 	count += 1
