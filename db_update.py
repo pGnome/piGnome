@@ -81,12 +81,11 @@ cur = db.cursor()
 init_tables(cur)
 
 count = 0
-while count < 100:
+while count < 250:
 	data_collect(cur)
 	db.commit()
 	moisture_setting(cur)
 	db.commit()
-	time.sleep(1)
 	print_db(cur)
 	count += 1
 
