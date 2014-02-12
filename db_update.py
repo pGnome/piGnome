@@ -44,16 +44,30 @@ def data_collect(cur):
 #retrieve setting from parse database#
 
 #updating the current moisture level setting
-def collect_db(cur, MoistureLevel, SettingTime):
+def row_count (cur):
+	cur.execute('''SELECT count(*)
+		FROM levelSet
+		''')
+	return cur.fetchall()[0]
+#insert
+def insert_db(cur, MoistureLevel, SettingTime):
 	cur.execute('''INSERT INTO levelSet
 		(LevelId, MoistureLevel, SettingTime)
 		VALUES (NULL,?,?)''', (MoistureLevel, SettingTime))
+#update
+def update_db(cur, MoistureLevel, SettingTime):
+	cur.execute('''UPDATE levelSet
+		SET MoistureLevel = ?, SettingTime = ?
+		WHERE LevelId = 1''', (MoistureLevel, SettingTime))
 def moisture_setting(cur):
 	recentSet = MoistureSetting.Query.all().order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 
 	for ob in recentOne:
-		collect_db(cur,ob.level,ob.createdAt)
+		if row_count(cur) == 0:
+			insert_db(cur,ob.level,ob.createdAt)
+		else:
+			update_db(cur,ob.level,ob.createdAt)
 
 #print out current data table#
 def print_db(cur):
