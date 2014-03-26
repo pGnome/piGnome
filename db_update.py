@@ -2,6 +2,7 @@ from parse_rest.connection import register
 from parse_rest.datatypes import Object
 import serial
 import sqlite3
+import math
 import time
 from datetime import datetime
 
@@ -35,11 +36,13 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 def data_collect(cur):
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
-	response = serialport.read(size=4)
-  	info = response.split('#') #zone,reading
-	print info
-	if len(info) == 2:
-  		insert_db(cur, info[1], info[0])
+	response = serialport.read(size=26)
+  	if response.__len__() > 0:
+		#parse channel number and moisture data from the packet
+		channel = math.log(ord(response[11]),2)
+		data = ord(response[13]) * 256 + ord(response[14]) + 1
+		level = int(data*100/1024)
+		insert_db(cur, level, channel)
 
 
 #retrieve setting from parse database#

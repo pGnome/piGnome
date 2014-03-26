@@ -5,6 +5,7 @@ from datetime import datetime
 
 db = sqlite3.connect("myDBfile.sqlite3")
 
+#create moisture level data table
 def init_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
 
@@ -27,11 +28,13 @@ init_db(cur)
 serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 
 while True:
-  response = serialport.read(size=1)
-  response.split('#') #zone,reading
-  populate_db(cur, response[1], response[0])
-  db.commit()
-
+  response = serialport.read(size=26)
+  if response.__len__() > 0:
+	#parse channel number and moisture data from the packet
+	channel = ord(response[11])
+	data = ord(response[13]) * 256 + ord(response[14])
+  	populate_db(cur, data, channel)
+  	db.commit()
 
 
 print_db()
