@@ -30,7 +30,7 @@ def pump_sig(cur):
 cur = db.cursor()
 while True:
 	pump_sig(cur)
-	time.sleep(5)
+	time.sleep(3)
 	
 GPIO.cleanup()
 db.close()
