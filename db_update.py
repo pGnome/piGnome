@@ -11,6 +11,7 @@ register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
 currentUser = User.login("testPi","raspberry")
+print currentUser
 
 #parse tables
 #moisture setting table
