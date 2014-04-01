@@ -24,7 +24,7 @@ db = sqlite3.connect("myDBfile.sqlite3")
 def init_data_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
 def init_setting_db(cur):
-	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT)''')
+	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT, GnomeZone INTEGER)''')
 def init_tables(cur):
 	init_data_db(cur)
 	init_setting_db(cur)
@@ -52,32 +52,32 @@ def data_collect(cur):
 #retrieve setting from parse database#
 
 #updating the current moisture level setting
-def row_count (cur):
+def row_count (cur, GnomeZone):
 	cur.execute('''SELECT count(*)
 		FROM levelSet
-		''')
+		WHERE GnomeZone = ?
+		''',())
 	return cur.fetchall()[0]
 #insert
-def insert_setting_db(cur, MoistureLevel, SettingTime):
+def insert_setting_db(cur, MoistureLevel, SettingTime, GnomeZone):
 	cur.execute('''INSERT INTO levelSet
-		(LevelId, MoistureLevel, SettingTime)
-		VALUES (NULL,?,?)''', (MoistureLevel, SettingTime))
+		(LevelId, MoistureLevel, SettingTime, GnomeZone)
+		VALUES (NULL,?,?,?)''', (MoistureLevel, SettingTime, GnomeZone))
 #update
-def update_setting_db(cur, MoistureLevel, SettingTime):
+def update_setting_db(cur, MoistureLevel, SettingTime, GnomeZone):
 	cur.execute('''UPDATE levelSet
 		SET MoistureLevel = ?, SettingTime = ?
-		WHERE LevelId = 1''', (MoistureLevel, SettingTime))
+		WHERE GnomeZone = ?''', (MoistureLevel, SettingTime, GnomeZone))
 def moisture_setting(cur):
-	recentSet = MoistureSetting.Query.all().order_by("-createdAt")
-
-	recentOne = recentSet.limit(1)
-
-	for ob in recentOne:
-		#print ob.user
-		if row_count(cur)[0] == 0:
-			insert_setting_db(cur,ob.level,ob.createdAt)
-		else:
-			update_setting_db(cur,ob.level,ob.createdAt)
+	for GnomeZone in range (1,3):
+		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
+		recentOne = recentSet.limit(1)
+		for ob in recentOne:
+			#print ob.user
+			if row_count(cur,GnomeZone)[0] == 0:
+				insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+			else:
+				update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 
 #print out current data table#
 def print_db(cur):
