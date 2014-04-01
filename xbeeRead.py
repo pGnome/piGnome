@@ -1,10 +1,9 @@
 import serial
 serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 while True:
-	response = serialport.read(size=26)
+	response = serialport.read(size=1)
 	if response.__len__() > 0:
-		for c in response:
-			print ord(c)
+		print response
 	else:
 		print "length is 0"
 
