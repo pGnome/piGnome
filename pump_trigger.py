@@ -5,9 +5,12 @@ import time
 db = sqlite3.connect("myDBfile.sqlite3")
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
+#pump GPIO pin
 GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+#zone GPIO pins
+GPIO.setup(11, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(13, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(15, GPIO.OUT, initial=GPIO.LOW)
 
 def pump_sig(cur):
 	cur.execute('''SELECT gnomeRecords.GnomeZone
@@ -18,22 +21,16 @@ def pump_sig(cur):
 			  gnomeRecords.MoistureLevel < levelSet.MoistureLevel
 		''')
 	settings = cur.fetchall()
-	cur.execute('''SELECT MoistureLevel, GnomeZone, MAX(RecordId)
-		FROM pGnome
-		GROUP BY GnomeZone
-		''')
-	readings = cur.fetchall()
-	# print readings
-	# for reading in readings:
-	# 	if setting[0] <= reading[0]:
-	# 		GPIO.output(12, GPIO.LOW)
-	# 	else:
-	# 		GPIO.output(12, GPIO.HIGH)
-	# 		break
+	
+
 	for setting in settings:
+		GPIO.output(12, GPIO.HIGH)
 		if setting == 1:
 			GPIO.output(11, GPIO.HIGH)
-	
+		elif setting == 2:
+			GPIO.output(13, GPIO.HIGH)
+		elif setting == 3:
+			GPIO.output(15, GPIO.HIGH)
 cur = db.cursor()
 while True:
 	pump_sig(cur)
