@@ -56,7 +56,7 @@ def row_count (cur, GnomeZone):
 	cur.execute('''SELECT count(*)
 		FROM levelSet
 		WHERE GnomeZone = ?
-		''',())
+		''',(GnomeZone,))
 	return cur.fetchall()[0]
 #insert
 def insert_setting_db(cur, MoistureLevel, SettingTime, GnomeZone):
@@ -69,11 +69,12 @@ def update_setting_db(cur, MoistureLevel, SettingTime, GnomeZone):
 		SET MoistureLevel = ?, SettingTime = ?
 		WHERE GnomeZone = ?''', (MoistureLevel, SettingTime, GnomeZone))
 def moisture_setting(cur):
-	for GnomeZone in range (1,3):
+	for GnomeZone in range (1,4):
 		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
 		recentOne = recentSet.limit(1)
 		for ob in recentOne:
-			#print ob.user
+			print type(GnomeZone)
+			print ob.level
 			if row_count(cur,GnomeZone)[0] == 0:
 				insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 			else:
