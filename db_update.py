@@ -68,10 +68,11 @@ def update_setting_db(cur, MoistureLevel, SettingTime):
 		SET MoistureLevel = ?, SettingTime = ?
 		WHERE LevelId = 1''', (MoistureLevel, SettingTime))
 def moisture_setting(cur):
-	recentSet = MoistureSetting.Query.all().filter(object__relatedTo={"object":{"__type":"Pointer","className":"User","objectId":currentUser.objectId}}).order_by("-createdAt")
+	recentSet = MoistureSetting.Query.filter(object__relatedTo={"object":{"__type":"Pointer","className":"User","objectId":currentUser.objectId}}).order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 
 	for ob in recentOne:
+		print ob
 		if row_count(cur)[0] == 0:
 			insert_setting_db(cur,ob.level,ob.createdAt)
 		else:
