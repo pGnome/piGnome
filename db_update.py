@@ -73,8 +73,6 @@ def moisture_setting(cur):
 		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
 		recentOne = recentSet.limit(1)
 		for ob in recentOne:
-			print type(GnomeZone)
-			print ob.level
 			if row_count(cur,GnomeZone)[0] == 0:
 				insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 			else:

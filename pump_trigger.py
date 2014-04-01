@@ -32,7 +32,7 @@ def pump_sig(cur):
 	# 		break
 	for setting in settings:
 		print setting[0]
-
+	
 cur = db.cursor()
 while True:
 	pump_sig(cur)
