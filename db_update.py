@@ -68,7 +68,6 @@ def moisture_setting(cur):
 	recentOne = recentSet.limit(1)
 
 	for ob in recentOne:
-		print ob
 		if row_count(cur)[0] == 0:
 			insert_setting_db(cur,ob.level,ob.createdAt)
 		else:
