@@ -31,7 +31,8 @@ def pump_sig(cur):
 	# 		GPIO.output(12, GPIO.HIGH)
 	# 		break
 	for setting in settings:
-		print setting[0]
+		if setting == 1:
+			GPIO.output(11, GPIO.HIGH)
 	
 cur = db.cursor()
 while True:
