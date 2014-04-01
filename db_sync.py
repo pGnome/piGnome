@@ -1,14 +1,11 @@
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
-from parse_rest.user import User
 import sqlite3
 import time
 
 
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
-
-currentUser = User.login("testPi","raspberry")
 
 db = sqlite3.connect("myDBfile.sqlite3")
 
@@ -24,7 +21,6 @@ def update_remote_db(cur):
 		''')
 	for record in cur.fetchall():
 		gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
-		gnomeScore.user = currentUser;
 		gnomeScore.save()
 
 cur = db.cursor()

@@ -1,6 +1,5 @@
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
-from parse_rest.user import User
 import serial
 import sqlite3
 import math
@@ -9,9 +8,6 @@ from datetime import datetime
 
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
 		 "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
-
-currentUser = User.login("testPi","raspberry")
-print currentUser.objectId
 
 #parse tables
 #moisture setting table
@@ -68,7 +64,7 @@ def update_setting_db(cur, MoistureLevel, SettingTime):
 		SET MoistureLevel = ?, SettingTime = ?
 		WHERE LevelId = 1''', (MoistureLevel, SettingTime))
 def moisture_setting(cur):
-	recentSet = MoistureSetting.Query.filter(object__relatedTo={"object":{"__type":"Pointer","className":"User","objectId":currentUser.objectId}}).order_by("-createdAt")
+	recentSet = MoistureSetting.Query.all().order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 
 	for ob in recentOne:
