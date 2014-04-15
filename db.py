@@ -6,8 +6,8 @@ def init_data_db(cur):
 def init_setting_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT, GnomeZone INTEGER)''')
 def init_tables(cur):
-	init_data_db(cur)
-	init_setting_db(cur)
+	init_data_db(cur.cursor())
+	init_setting_db(cur.cursor())
 
 #inserting data from moisture sensors#
 def insert_db(cur, MoistureLevel, GnomeZone):
@@ -24,7 +24,7 @@ def data_collect(cur, txt=''):
 		channel = math.log(ord(response[11]),2)
 		data = ord(response[13]) * 256 + ord(response[14]) + 1
 		level = int(data*100/1024)
-		insert_db(cur, level, channel)
+		insert_db(cur.cursor(), level, channel)
 
 #updating the current moisture level setting#
 def row_count (cur, GnomeZone):
@@ -50,12 +50,13 @@ def moisture_setting(cur, txt=''):
 		recentOne = recentSet.limit(1)
 		for ob in recentOne:
 			if row_count(cur,GnomeZone)[0] == 0:
-				insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+				insert_setting_db(cur.cursor(),ob.level,ob.createdAt,ob.gnomeZone)
 			else:
-				update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+				update_setting_db(cur.cursor(),ob.level,ob.createdAt,ob.gnomeZone)
 
 #pushing data from local database to parse database#
-def update_remote_db(cur, txt=''):
+def update_remote_db(database, txt=''):
+	cur = database.cursor()
 	cur.execute('''SELECT *
 		FROM pGnome
 		''')
