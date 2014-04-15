@@ -74,13 +74,13 @@ def intervalExecute(interval, func, *args, **argd):
 
 if __name__=='__main__':
     
-    cur = myDatabase.cursor()
-    db.init_tables(cur)
+    #cur = myDatabase.cursor()
+    db.init_tables(myDatabase)
 
-    cancellObj1 = intervalExecute(1.0, db.data_collect, cur, 'data_collect')
-    cancellObj2 = intervalExecute(1.0, db.moisture_setting, cur, 'moisture_setting')
-    cancellObj3 = intervalExecute(60.0, db.update_remote_db, cur, 'update_remote_db')
-    cancellObj4 = intervalExecute(1.0, pump.pump_sig, cur, gpio_pins)
+    cancellObj1 = intervalExecute(1.0, db.data_collect, myDatabase, 'data_collect')
+    cancellObj2 = intervalExecute(1.0, db.moisture_setting, myDatabase, 'moisture_setting')
+    cancellObj3 = intervalExecute(60.0, db.update_remote_db, myDatabase, 'update_remote_db')
+    cancellObj4 = intervalExecute(1.0, pump.pump_sig, myDatabase, gpio_pins)
     
     
     #print cancellObj() #: cancel the intervalExecute timer.
