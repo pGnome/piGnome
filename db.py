@@ -1,5 +1,5 @@
 #Methods associatted with databases#
-
+import serial
 #initialize database#
 def init_data_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')

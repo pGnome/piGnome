@@ -12,7 +12,7 @@ import db
 import pump
 
 #connect to the local database#
-myDatabase = sqlite3.connect("myDBfile.sqlite3")
+myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 
 #GPIO settings#
 
