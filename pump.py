@@ -24,5 +24,10 @@ def pump_sig(identifier,gpio_pins):
 			GPIO.output(gpio_pins[2], GPIO.HIGH)
 		elif setting == 3:
 			GPIO.output(gpio_pins[3], GPIO.HIGH)
-	myDatabase.commit()
+	
+	try:
+		myDatabase.commit()
+	except DatabaseError:
+		myDatabase.rollback()
+
 	print identifier
