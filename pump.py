@@ -25,5 +25,4 @@ def pump_sig(identifier,gpio_pins):
 		elif setting == 3:
 			GPIO.output(gpio_pins[3], GPIO.HIGH)
 	myDatabase.commit()
-	myDatabase.close()
 	print identifier

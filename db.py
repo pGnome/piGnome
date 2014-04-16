@@ -43,7 +43,6 @@ def data_collect(identifier, txt=''):
 		level = int(data*100/1024)
 		insert_db(cur, level, channel)
 	myDatabase.commit()
-	myDatabase.close()
 	print identifier
 
 #updating the current moisture level setting#
@@ -74,7 +73,6 @@ def moisture_setting(identifier, txt=''):
 			else:
 				update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 	myDatabase.commit()
-	myDatabase.close()
 	print identifier
 
 #pushing data from local database to parse database#
@@ -86,5 +84,4 @@ def update_remote_db(identifier,txt=''):
 		gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
 		gnomeScore.save()
 	myDatabase.commit()
-	myDatabase.close()
 	print identifier
