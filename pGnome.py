@@ -66,6 +66,7 @@ if __name__=='__main__':
     
     cur = myDatabase.cursor()
     db.init_tables()
+    myDatabase.commit()
 
     cancellObj1 = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
     cancellObj2 = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
