@@ -1,9 +1,22 @@
 #Methods associatted with databases#
+from parse_rest.connection import register
+from parse_rest.datatypes import Object
 import serial
 import sqlite3
 #connect to the local database#
 myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 cur = myDatabase.cursor()
+
+#connect to the parse database#
+register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
+         "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
+#mositure history table
+class Moisture(Object):
+    pass
+#moisture setting table
+class MoistureSetting(Object):
+    pass
+
 #initialize database#
 def init_data_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
