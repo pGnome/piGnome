@@ -1,5 +1,3 @@
-from parse_rest.connection import register
-from parse_rest.datatypes import Object
 from datetime import datetime
 import RPi.GPIO as GPIO
 import sqlite3
@@ -32,15 +30,7 @@ GPIO.setup(zone1, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(zone2, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(zone3, GPIO.OUT, initial=GPIO.LOW)
 
-#connect to the parse database#
-register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
-         "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
-#mositure history table
-class Moisture(Object):
-    pass
-#moisture setting table
-class MoistureSetting(Object):
-    pass
+
 
 def intervalExecute(interval, func, *args, **argd):
     ''' @param interval: execute func(*args, **argd) each interval
