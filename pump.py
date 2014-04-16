@@ -27,7 +27,7 @@ def pump_sig(identifier,gpio_pins):
 	
 	try:
 		myDatabase.commit()
-	except DatabaseError:
+	except Exception:
 		myDatabase.rollback()
 
 	print identifier

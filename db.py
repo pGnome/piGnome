@@ -44,7 +44,7 @@ def data_collect(identifier, txt=''):
 		insert_db(cur, level, channel)
 	try:
 		myDatabase.commit()
-	except OperationalError:
+	except Exception:
 		myDatabase.rollback()
 
 	print identifier
@@ -78,7 +78,7 @@ def moisture_setting(identifier, txt=''):
 				update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 	try:
 		myDatabase.commit()
-	except OperationalError:
+	except Exception:
 		myDatabase.rollback()
 
 	print identifier
@@ -93,6 +93,6 @@ def update_remote_db(identifier,txt=''):
 		gnomeScore.save()
 	try:
 		myDatabase.commit()
-	except OperationalError:
+	except Exception:
 		myDatabase.rollback()
 	print identifier
