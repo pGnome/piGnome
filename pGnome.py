@@ -40,7 +40,8 @@ def intervalExecute(interval, func, *args, **argd):
     def threadProc(*args, **argd):
         while True:
             cancelled.wait(interval)
-            if cancelled.isSet():
+            print "running"
+	    if cancelled.isSet():
                 break
             func(*args, **argd) #: could be a lenthy operation
     th = threading.Thread(target=threadProc, args=args, kwargs=argd)
