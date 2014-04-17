@@ -4,7 +4,6 @@ import sqlite3
 import time
 import threading
 import serial
-import math
 #python modules for pGnome
 import db
 import pump
