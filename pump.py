@@ -32,13 +32,14 @@ def pump_sig(identifier,gpio_pins):
 			break;
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
-			
+
 	try:	
 		myDatabase.commit()
+		myDatabase.close()
 	except Exception:
 		myDatabase.rollback()
 
-	print identifier
+	#print identifier
 
 def unlock_db(db_filename):
     connection = sqlite3.connect(db_filename)
