@@ -110,6 +110,6 @@ def update_remote_db(identifier,txt=''):
 	print identifier
 
 def unlock_db(db_filename):
-    connection = sqlite.connect(db_filename)
+    connection = sqlite3.connect(db_filename)
     connection.commit()
     connection.close()

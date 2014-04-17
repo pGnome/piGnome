@@ -34,6 +34,6 @@ def pump_sig(identifier,gpio_pins):
 	print identifier
 
 def unlock_db(db_filename):
-    connection = sqlite.connect(db_filename)
+    connection = sqlite3.connect(db_filename)
     connection.commit()
     connection.close()
