@@ -133,17 +133,17 @@ def update_remote_db(identifier,txt=''):
 			for record in cur.fetchall():
 				gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
 				gnomeScore.save()
+			print cur.fetchall()
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
-
 
 	try:
 		myDatabase.commit()
 		myDatabase.close()
 	except Exception:
 		myDatabase.rollback()
-	print cur.fetchall()
+	
 	print identifier
 
 
