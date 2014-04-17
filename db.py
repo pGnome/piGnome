@@ -26,8 +26,13 @@ def init_tables():
 	#connect to the local database#
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
-	init_data_db(cur)
-	init_setting_db(cur)
+	while True:
+		try:
+			init_data_db(cur)
+			init_setting_db(cur)
+			break
+		except Exception:
+			unlock_db("myDBfile.sqlite3")
 
 #inserting data from moisture sensors#
 def insert_db(cur, MoistureLevel, GnomeZone):
