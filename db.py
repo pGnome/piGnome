@@ -22,6 +22,7 @@ def init_data_db(cur):
 def init_setting_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT, GnomeZone INTEGER)''')
 def init_tables():
+	unlock_db("myDBfile.sqlite3")
 	#connect to the local database#
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
