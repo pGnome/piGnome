@@ -128,15 +128,16 @@ def update_remote_db(identifier,txt=''):
 	while True:
 		try:
 			cur.execute('''SELECT *
-			FROM pGnome
-			''')
+				FROM pGnome
+				''')
+			for record in cur.fetchall():
+				gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
+				gnomeScore.save()
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
 
-	for record in cur.fetchall():
-		gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
-		gnomeScore.save()
+
 	try:
 		myDatabase.commit()
 		myDatabase.close()
