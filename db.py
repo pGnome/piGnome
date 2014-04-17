@@ -42,7 +42,7 @@ def data_collect(identifier, txt=''):
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=26)
-  	if response.__len__() > 0:
+  	if response.__len__() == 26:
 		#parse channel number and moisture data from the packet
 		channel = math.log(ord(response[11]),2)
 		data = ord(response[13]) * 256 + ord(response[14]) + 1
