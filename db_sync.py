@@ -14,8 +14,12 @@ db = sqlite3.connect("myDBfile.sqlite3")
 class Moisture(Object):
     pass
 
+class Barrel(Object):
+	pass
+
 #pushing data from local database to parse database#
 def update_remote_db(cur):
+	#moisture level
 	cur.execute('''SELECT *
 		FROM pGnome
 		''')
@@ -23,14 +27,21 @@ def update_remote_db(cur):
 		gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
 		gnomeScore.save()
 
+	#water level
+	cur.execute('''SELECT *
+		FROM waterLevel
+		''')
+	for record in cur.fetchall():
+		gnomeScore = Barrel(level=record[1], collectedTime=record[2])
+		gnomeScore.save()
+
+
 cur = db.cursor()
 
-count = 0
-while count < 5:
+while True:
 	update_remote_db(cur)
 	db.commit()
 	time.sleep(60)
-	count += 1
 
 db.commit()
 db.close()

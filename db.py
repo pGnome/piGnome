@@ -33,6 +33,7 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
+	unlock_db("myDBfile.sqlite3")
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=26)
@@ -68,6 +69,7 @@ def update_setting_db(cur, MoistureLevel, SettingTime, GnomeZone):
 		WHERE GnomeZone = ?''', (MoistureLevel, SettingTime, GnomeZone))
 #main function to update the current moisture level setting#
 def moisture_setting(identifier, txt=''):
+	unlock_db("myDBfile.sqlite3")
 	for GnomeZone in range (1,4):
 		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
 		recentOne = recentSet.limit(1)
@@ -85,6 +87,7 @@ def moisture_setting(identifier, txt=''):
 
 #pushing data from local database to parse database#
 def update_remote_db(identifier,txt=''):
+	unlock_db("myDBfile.sqlite3")
 	cur.execute('''SELECT *
 		FROM pGnome
 		''')
@@ -96,3 +99,8 @@ def update_remote_db(identifier,txt=''):
 	except Exception:
 		myDatabase.rollback()
 	print identifier
+
+def unlock_db(db_filename):
+    connection = sqlite.connect(db_filename)
+    connection.commit()
+    connection.close()

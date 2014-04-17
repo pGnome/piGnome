@@ -23,10 +23,13 @@ db = sqlite3.connect("myDBfile.sqlite3")
 #initialize database#
 def init_data_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
+def init_waterLevel_db(cur):
+	cur.execute('''CREATE TABLE IF NOT EXISTS waterLevel (waterId INTEGER PRIMARY KEY, WaterLevel INTEGER, CollectedTime TEXT)''')
 def init_setting_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT, GnomeZone INTEGER)''')
 def init_tables(cur):
 	init_data_db(cur)
+	init_waterLevel_db(cur)
 	init_setting_db(cur)
 
 
@@ -88,14 +91,12 @@ def print_db(cur):
 cur = db.cursor()
 init_tables(cur)
 
-count = 0
-while count < 250:
+while True:
 	data_collect(cur)
 	db.commit()
 	moisture_setting(cur)
 	db.commit()
 	print_db(cur)
-	count += 1
 
 
 db.commit()
