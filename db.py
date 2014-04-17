@@ -3,9 +3,6 @@ from parse_rest.connection import register
 from parse_rest.datatypes import Object
 import serial
 import sqlite3
-#connect to the local database#
-myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
-cur = myDatabase.cursor()
 
 #connect to the parse database#
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
@@ -23,6 +20,9 @@ def init_data_db(cur):
 def init_setting_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT, GnomeZone INTEGER)''')
 def init_tables():
+	#connect to the local database#
+	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+	cur = myDatabase.cursor()
 	init_data_db(cur)
 	init_setting_db(cur)
 
@@ -34,6 +34,9 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
+	#connect to the local database#
+	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+	cur = myDatabase.cursor()
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=26)
@@ -70,6 +73,9 @@ def update_setting_db(cur, MoistureLevel, SettingTime, GnomeZone):
 #main function to update the current moisture level setting#
 def moisture_setting(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
+	#connect to the local database#
+	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+	cur = myDatabase.cursor()
 	for GnomeZone in range (1,4):
 		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
 		recentOne = recentSet.limit(1)
@@ -88,6 +94,9 @@ def moisture_setting(identifier, txt=''):
 #pushing data from local database to parse database#
 def update_remote_db(identifier,txt=''):
 	unlock_db("myDBfile.sqlite3")
+	#connect to the local database#
+	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+	cur = myDatabase.cursor()
 	cur.execute('''SELECT *
 		FROM pGnome
 		''')

@@ -1,12 +1,12 @@
 #multi-zone pump triggering#
 import sqlite3
 import RPi.GPIO as GPIO
-#connect to the local database#
-myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
-cur = myDatabase.cursor()
 
 def pump_sig(identifier,gpio_pins):
 	unlock_db("myDBfile.sqlite3")
+	#connect to the local database#
+	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+	cur = myDatabase.cursor()
 	
 		cur.execute('''SELECT gnomeRecords.GnomeZone
 			FROM (SELECT MoistureLevel, GnomeZone, MAX(RecordId) as gnomeId
