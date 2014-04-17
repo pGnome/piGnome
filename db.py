@@ -44,10 +44,12 @@ def data_collect(identifier, txt=''):
 	response = serialport.read(size=26)
   	if response.__len__() == 26:
 		#parse channel number and moisture data from the packet
-		channel = math.log(ord(response[11]),2)
-		data = ord(response[13]) * 256 + ord(response[14]) + 1
-		level = int(data*100/1024)
-		insert_db(cur, level, channel)
+		channelRaw = ord(response[11]);
+		if (channelRaw > 0):
+			channel = math.log(channelRaw,2)
+			data = ord(response[13]) * 256 + ord(response[14]) + 1
+			level = int(data*100/1024)
+			insert_db(cur, level, channel)
 	try:
 		myDatabase.commit()
 		myDatabase.close()
