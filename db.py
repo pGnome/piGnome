@@ -33,6 +33,11 @@ def init_tables():
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
+	try:
+		myDatabase.commit()
+		myDatabase.close()
+	except Exception:
+		myDatabase.rollback()
 
 #inserting data from moisture sensors#
 def insert_db(cur, MoistureLevel, GnomeZone):
@@ -55,7 +60,13 @@ def data_collect(identifier, txt=''):
 			channel = math.log(channelRaw,2)
 			data = ord(response[13]) * 256 + ord(response[14]) + 1
 			level = int(data*100/1024)
-			insert_db(cur, level, channel)
+			while True:
+				try:
+					insert_db(cur, level, channel)
+					break
+				except Exception:
+					unlock_db("myDBfile.sqlite3")
+			
 	try:
 		myDatabase.commit()
 		myDatabase.close()
@@ -91,10 +102,15 @@ def moisture_setting(identifier, txt=''):
 		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
 		recentOne = recentSet.limit(1)
 		for ob in recentOne:
-			if row_count(cur,GnomeZone)[0] == 0:
-				insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
-			else:
-				update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+			while True:
+				try:
+					if row_count(cur,GnomeZone)[0] == 0:
+						insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+					else:
+						update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+					break
+				except Exception:
+					unlock_db("myDBfile.sqlite3")
 	try:
 		myDatabase.commit()
 		myDatabase.close()
@@ -109,9 +125,15 @@ def update_remote_db(identifier,txt=''):
 	#connect to the local database#
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
-	cur.execute('''SELECT *
-		FROM pGnome
-		''')
+	while True:
+		try:
+			cur.execute('''SELECT *
+			FROM pGnome
+			''')
+			break
+		except Exception:
+			unlock_db("myDBfile.sqlite3")
+
 	for record in cur.fetchall():
 		gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
 		gnomeScore.save()
