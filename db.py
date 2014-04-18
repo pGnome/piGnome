@@ -110,6 +110,11 @@ def moisture_setting(identifier, txt=''):
 						insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 					else:
 						update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
+					cur.execute('''SELECT *
+						FROM levelSet
+						''')
+					for record in cur.fetchall():
+						print record
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
