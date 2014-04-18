@@ -24,9 +24,9 @@ GPIO.setmode(GPIO.BOARD)
 #pump GPIO pin
 GPIO.setup(pumpOut, GPIO.OUT, initial=GPIO.LOW)
 #zone GPIO pins
-GPIO.setup(zone1, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(zone2, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(zone3, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(zone1, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(zone2, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(zone3, GPIO.OUT, initial=GPIO.HIGH)
 
 
 

@@ -21,13 +21,14 @@ def pump_sig(identifier,gpio_pins):
 			
 
 			for setting in settings:
+				print setting
 				GPIO.output(gpio_pins[0], GPIO.HIGH)
 				if setting == 1:
-					GPIO.output(gpio_pins[1], GPIO.HIGH)
+					GPIO.output(gpio_pins[1], GPIO.LOW)
 				elif setting == 2:
-					GPIO.output(gpio_pins[2], GPIO.HIGH)
+					GPIO.output(gpio_pins[2], GPIO.LOW)
 				elif setting == 3:
-					GPIO.output(gpio_pins[3], GPIO.HIGH)
+					GPIO.output(gpio_pins[3], GPIO.LOW)
 
 			break;
 		except Exception:
