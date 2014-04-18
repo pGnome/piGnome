@@ -14,7 +14,7 @@ def read_adc( clk_pin, din_pin, cs_pin, dout_pin):
     GPIO.output(clk_pin, False) # clk starts low
     GPIO.output(cs_pin, False)  # bring cs down low
 
-    # indicate to the MCP3008 that we only need to read from channel 0
+    # indicate to the MCP3008 that we only need to readee from channel 0
     # by pulsing b11000 through the CS pin
     ch0 = 0x02
     for ii in range(5):
@@ -75,41 +75,94 @@ class CircBuffer:
         return runsum * 1.0 / self.size
 
 
-GPIO.setwarnings(False)
+def readLevelCont():
 
-# declare pin names
-CLK = 18
-DIN = 24
-CS = 25
-DOUT = 23
+    GPIO.setwarnings(False)
 
-# set pinout numbering convention
-GPIO.setmode(GPIO.BCM)
-
-# set up input and output channels
-GPIO.setup(CLK, GPIO.OUT)
-GPIO.setup(DIN, GPIO.OUT)
-GPIO.setup(CS, GPIO.OUT)
-GPIO.setup(DOUT, GPIO.IN)
-
-BUFF_SIZE = 5
-
-d_level = CircBuffer(BUFF_SIZE)
-
-
-while True:
-
-
-    # d_level: raw digital output of MCP3008
-    d_level.insert( read_adc(CLK, DIN, CS, DOUT) )
+    # declare pin names
+    CLK = 18
+    DIN = 24
+    CS = 25
+    DOUT = 23
     
-    # a_level: analog water level
-    a_level = ( d_level.average() / 1024.0 ) * 3.3
+    # set pinout numbering convention
+    GPIO.setmode(GPIO.BCM)
+    
+    # set up input and output channels
+    GPIO.setup(CLK, GPIO.OUT)
+    GPIO.setup(DIN, GPIO.OUT)
+    GPIO.setup(CS, GPIO.OUT)
+    GPIO.setup(DOUT, GPIO.IN)
+    
+    BUFF_SIZE = 5
+    
+    d_level = CircBuffer(BUFF_SIZE)
+   
+   
+    while True:
+        
+        n = read_adc(CLK, DIN, CS, DOUT)
 
-    print "Digital: ", d_level.average()
-
-    print "Potential: ", a_level
-
-    time.sleep(1)    # sleep for a sec
+        print "Inserting: ", n
+        # d_level: raw digital output of MCP3008
+        d_level.insert( n )
+        
+        # a_level: analog water level
+        a_level = ( d_level.average() / 1024.0 ) * 3.3
+        
+        print "Digital: ", d_level.average()
+        
+        print "Potential: ", a_level
+        
+        time.sleep(1)    # sleep for a sec
 
     
+    return "DONE!"
+
+
+def readLevel():
+    
+    GPIO.setwarnings(False)
+
+    # declare pin names
+    CLK = 18
+    DIN = 24
+    CS = 25
+    DOUT = 23
+    
+    # max digital output of sensor
+    DOUT_MAX = 1024.0
+    
+    # VOLT_MAX is the max voltage that can be read across the sensor
+    VOLT_MAX = 3.3
+
+    # set pinout numbering convention
+    GPIO.setmode(GPIO.BCM)
+    
+    # set up input and output channels
+    GPIO.setup(CLK, GPIO.OUT)
+    GPIO.setup(DIN, GPIO.OUT)
+    GPIO.setup(CS, GPIO.OUT)
+    GPIO.setup(DOUT, GPIO.IN)
+    
+    
+    
+    SAMPLE_SIZE = 5
+
+    d_level = CircBuffer(SAMPLE_SIZE)
+        
+    runsum = 0
+
+    for ii in range(0, SAMPLE_SIZE ):
+        
+        n = read_adc(CLK, DIN, CS, DOUT)
+
+        print "Inserting: ", n
+
+        d_level.insert( n )
+        
+
+        time.sleep(0.3)    # sleep for a milli sec
+
+    
+    return d_level.average()
