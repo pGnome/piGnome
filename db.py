@@ -36,9 +36,6 @@ def init_tables():
 			init_data_db(cur)
 			init_setting_db(cur)
 			init_water_db(cur)
-			insert_db(cur,100,1)
-			insert_db(cur,100,2)
-			insert_db(cur,100,3)
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
@@ -49,24 +46,11 @@ def init_tables():
 		myDatabase.rollback()
 
 ###### MOISTURE LEVEL ######
-#check if zone data exist in the table
-def row_data_count (cur, GnomeZone):
-	cur.execute('''SELECT count(*)
-		FROM pGnome
-		WHERE GnomeZone = ?
-		''',(GnomeZone,))
-	return cur.fetchall()[0]
 #inserting data from moisture sensors#
 def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
 		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
-#update data from moisture sensors#
-def update_db(cur, MoistureLevel, GnomeZone):
-	cur.execute('''UPDATE levelSet
-		SET MoistureLevel = ?, CollectedTime = ?
-		WHERE GnomeZone = ?''', (MoistureLevel, datetime.now(), GnomeZone))
-	print cur.fetchall()
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
@@ -87,15 +71,10 @@ def data_collect(identifier, txt=''):
 			print level
 			while True:
 				try:
-					# if row_data_count(cur,channel)[0] == 0:
-					# 	insert_db(cur, level, channel)
-					# else:
-					update_db(cur, level, channel)
-					print "---------------"
+					insert_db(cur, level, channel)
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
-					print "*****************"
 			
 	try:
 		myDatabase.commit()
