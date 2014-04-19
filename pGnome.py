@@ -70,7 +70,7 @@ if __name__=='__main__':
     cancellObj2 = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
     cancellObj3 = intervalExecute(30.0, db.update_remote_db, 3, 'update_remote_db')
     cancellObj4 = intervalExecute(1.0, pump.pump_sig, 4, gpio_pins)
-    
+    cancellObj5 = intervalExecute(30.0, db.data_water_collect, 5, 'data_water_collect')
     
     #print cancellObj() #: cancel the intervalExecute timer.
     #print 'after calling close'

@@ -4,6 +4,7 @@ import os
 import RPi.GPIO as GPIO
 import array
 
+
 def pulse_clock( clk_pin ):
     GPIO.output(clk_pin, True)
     time.sleep( 0.000002 )     # wait 
