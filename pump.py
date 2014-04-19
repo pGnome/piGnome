@@ -24,6 +24,7 @@ def pump_sig(identifier,gpio_pins):
 			for setting in settings:
 				zoneArray.append(setting[0])
 
+			print zoneArray
 			pumpOn = False
 			for i in range(1, 4):
 				if i in zoneArray:
@@ -32,7 +33,6 @@ def pump_sig(identifier,gpio_pins):
 					print "watering zone " + i
 				else:
 					GPIO.output(gpio_pins[i], GPIO.HIGH)
-					print "nope"
 
 			if pumpOn:
 				GPIO.output(gpio_pins[0], GPIO.HIGH)
