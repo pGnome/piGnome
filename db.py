@@ -36,6 +36,9 @@ def init_tables():
 			init_data_db(cur)
 			init_setting_db(cur)
 			init_water_db(cur)
+			insert_db(cur,0,1)
+			insert_db(cur,0,2)
+			insert_db(cur,0,3)
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
@@ -85,10 +88,10 @@ def data_collect(identifier, txt=''):
 			print level
 			while True:
 				try:
-					if row_data_count(cur,channel)[0] == 0:
-						insert_db(cur, level, channel)
-					else:
-						update_db(cur, level, channel)
+					# if row_data_count(cur,channel)[0] == 0:
+					# 	insert_db(cur, level, channel)
+					# else:
+					update_db(cur, level, channel)
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
