@@ -63,7 +63,7 @@ def update_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''UPDATE levelSet
 		SET MoistureLevel = ?, CollectedTime = ?
 		WHERE GnomeZone = ?''', (MoistureLevel, datetime.now(), GnomeZone))
-	print cur.fetchall()
+	#print cur.fetchall()
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
