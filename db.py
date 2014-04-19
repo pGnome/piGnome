@@ -75,7 +75,7 @@ def data_collect(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	print identifier
+	# print identifier
 
 #updating the current moisture level setting#
 def row_count (cur, GnomeZone):
@@ -124,7 +124,7 @@ def moisture_setting(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	print identifier
+	# print identifier
 
 #pushing data from local database to parse database#
 def update_remote_db(identifier,txt=''):
@@ -151,7 +151,7 @@ def update_remote_db(identifier,txt=''):
 	except Exception:
 		myDatabase.rollback()
 	
-	print identifier
+	# print identifier
 
 
 def unlock_db(db_filename):
