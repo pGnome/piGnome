@@ -15,12 +15,17 @@ class Moisture(Object):
 #moisture setting table
 class MoistureSetting(Object):
     pass
+#water level table
+class Barrel(Object):
+    pass
 
 #initialize database#
 def init_data_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS pGnome (RecordId INTEGER PRIMARY KEY, MoistureLevel INTEGER, GnomeZone INTEGER, CollectedTime TEXT)''')
 def init_setting_db(cur):
 	cur.execute('''CREATE TABLE IF NOT EXISTS levelSet (LevelId INTEGER PRIMARY KEY, MoistureLevel INTEGER, SettingTime TEXT, GnomeZone INTEGER)''')
+def init_water_db(cur):
+	cur.execute('''CREATE TABLE IF NOT EXISTS waterLevel (RecordId INTEGER PRIMARY KEY, waterLevel INTEGER, CollectedTime TEXT)''')
 def init_tables():
 	unlock_db("myDBfile.sqlite3")
 	#connect to the local database#
@@ -30,6 +35,7 @@ def init_tables():
 		try:
 			init_data_db(cur)
 			init_setting_db(cur)
+			init_water_db(cur)
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
@@ -39,11 +45,24 @@ def init_tables():
 	except Exception:
 		myDatabase.rollback()
 
+###### MOISTURE LEVEL ######
+#check if zone data exist in the table
+def row_data_count (cur, GnomeZone):
+	cur.execute('''SELECT count(*)
+		FROM pGnome
+		WHERE GnomeZone = ?
+		''',(GnomeZone,))
+	return cur.fetchall()[0]
 #inserting data from moisture sensors#
 def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
 		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
+#update data from moisture sensors#
+def update_db(cur, MoistureLevel, GnomeZone):
+	cur.execute('''UPDATE levelSet
+		SET MoistureLevel = ?, CollectedTime = ?
+		WHERE GnomeZone = ?''', (MoistureLevel, datetime.now(), GnomeZone))
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
@@ -52,18 +71,21 @@ def data_collect(identifier, txt=''):
 	cur = myDatabase.cursor()
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
-	response = serialport.read(size=26)
-  	if response.__len__() == 26:
+	response = serialport.read(size=24)
+	print response.__len__()
+  	if response.__len__() == 24:
 		#parse channel number and moisture data from the packet
-		channelRaw = ord(response[11]);
-		print channelRaw
-		if (channelRaw > 0):
-			channel = math.log(channelRaw,2)
-			data = ord(response[13]) * 256 + ord(response[14]) + 1
+		channelRaw = ord(response[4])
+		if channelRaw > 0:
+			channel = channelRaw / 17
+			data = ord(response[11]) * 256 + ord(response[12]) + 1
 			level = int(data*100/1024)
 			while True:
 				try:
-					insert_db(cur, level, channel)
+					if row_data_count(cur,channel)[0] == 0:
+						insert_db(cur, level, channel)
+					else:
+						update_db(cur, level, channel)
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
@@ -76,6 +98,51 @@ def data_collect(identifier, txt=''):
 
 	# print identifier
 
+###### WATER LEVEL ######
+#check if water level data exist in the table
+def row_water_count (cur):
+	cur.execute('''SELECT count(*)
+		FROM waterLevel
+		''')
+	return cur.fetchall()[0]
+#inserting data from moisture sensors#
+def insert_water_db(cur, waterLevel):
+	cur.execute('''INSERT INTO waterLevel
+		(RecordId, waterLevel, CollectedTime)
+		VALUES (NULL,?,?)''', (waterLevel, datetime.now()))
+#update data from moisture sensors#
+def update_water_db(cur, waterLevel):
+	cur.execute('''UPDATE waterLevel
+		SET MoistureLevel = ?, CollectedTime = ?
+		WHERE RecordId = 1''', (waterLevel, datetime.now()))
+
+#main method to collect current water level data#
+def data_collect(identifier, txt=''):
+	unlock_db("myDBfile.sqlite3")
+	#connect to the local database#
+	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+	cur = myDatabase.cursor()
+
+	while True:
+		try:
+			if row_water_count(cur)[0] == 0:
+				insert_water_db(cur, level)
+			else:
+				update_water_db(cur, level)
+			break
+		except Exception:
+			unlock_db("myDBfile.sqlite3")
+			
+	try:
+		myDatabase.commit()
+		myDatabase.close()
+	except Exception:
+		myDatabase.rollback()
+
+	# print identifier
+
+
+###### MOISTURE SETTING ######
 #updating the current moisture level setting#
 def row_count (cur, GnomeZone):
 	cur.execute('''SELECT count(*)
@@ -125,6 +192,8 @@ def moisture_setting(identifier, txt=''):
 
 	# print identifier
 
+
+###### SYNCING DATABASE ######
 #pushing data from local database to parse database#
 def update_remote_db(identifier,txt=''):
 	unlock_db("myDBfile.sqlite3")
@@ -152,7 +221,7 @@ def update_remote_db(identifier,txt=''):
 	
 	# print identifier
 
-
+#prevent database locking issue
 def unlock_db(db_filename):
     connection = sqlite3.connect(db_filename)
     connection.commit()
