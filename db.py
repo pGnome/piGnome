@@ -63,7 +63,7 @@ def update_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''UPDATE levelSet
 		SET MoistureLevel = ?, CollectedTime = ?
 		WHERE GnomeZone = ?''', (MoistureLevel, datetime.now(), GnomeZone))
-	#print cur.fetchall()
+	print cur.fetchall()
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
@@ -73,14 +73,15 @@ def data_collect(identifier, txt=''):
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=24)
-	print response.__len__()
   	if response.__len__() == 24:
 		#parse channel number and moisture data from the packet
 		channelRaw = ord(response[4])
 		if channelRaw > 0:
 			channel = channelRaw / 17
+			print channel
 			data = ord(response[11]) * 256 + ord(response[12]) + 1
 			level = int(data*100/1024)
+			print level
 			while True:
 				try:
 					if row_data_count(cur,channel)[0] == 0:
