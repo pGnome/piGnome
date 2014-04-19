@@ -36,9 +36,9 @@ def init_tables():
 			init_data_db(cur)
 			init_setting_db(cur)
 			init_water_db(cur)
-			insert_db(cur,0,1)
-			insert_db(cur,0,2)
-			insert_db(cur,0,3)
+			insert_db(cur,100,1)
+			insert_db(cur,100,2)
+			insert_db(cur,100,3)
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
@@ -82,7 +82,6 @@ def data_collect(identifier, txt=''):
 		channelRaw = ord(response[4])
 		if channelRaw > 0:
 			channel = channelRaw / 17
-			print channel
 			data = ord(response[11]) * 256 + ord(response[12]) + 1
 			level = int(data*100/1024)
 			print level
@@ -95,6 +94,7 @@ def data_collect(identifier, txt=''):
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
+					print "*****************"
 			
 	try:
 		myDatabase.commit()
