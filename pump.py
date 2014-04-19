@@ -25,7 +25,7 @@ def pump_sig(identifier,gpio_pins):
 				zoneArray.append(setting[0])
 
 			pumpOn = False
-			for i in range(1:4):
+			for i in range(1, 4):
 				if i in zoneArray:
 					GPIO.output(gpio_pins[i], GPIO.LOW)
 					pumpOn = True
