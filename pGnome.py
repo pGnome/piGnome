@@ -68,7 +68,7 @@ if __name__=='__main__':
 
     cancellObj1 = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
     cancellObj2 = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
-    cancellObj3 = intervalExecute(20.0, db.update_remote_db, 3, 'update_remote_db')
+    cancellObj3 = intervalExecute(30.0, db.update_remote_db, 3, 'update_remote_db')
     cancellObj4 = intervalExecute(1.0, pump.pump_sig, 4, gpio_pins)
     
     
