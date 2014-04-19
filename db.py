@@ -98,7 +98,7 @@ def data_collect(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	#print identifier
+	print "collecting data"
 
 ###### WATER LEVEL ######
 #check if water level data exist in the table
