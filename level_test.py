@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from water_levelRead import readLevel, readLevelCont
+import water_levelRead
 
-msg = readLevel()
-print "water level: "
-print msg
+periodicReadLevel()
