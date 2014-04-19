@@ -97,7 +97,7 @@ def data_collect(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	print identifier
+	#print identifier
 
 ###### WATER LEVEL ######
 #check if water level data exist in the table
@@ -118,7 +118,7 @@ def update_water_db(cur, waterLevel):
 		WHERE RecordId = 1''', (waterLevel, datetime.now()))
 
 #main method to collect current water level data#
-def data_collect(identifier, txt=''):
+def data_water_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
 	#connect to the local database#
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
