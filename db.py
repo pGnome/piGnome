@@ -91,6 +91,7 @@ def data_collect(identifier, txt=''):
 					# 	insert_db(cur, level, channel)
 					# else:
 					update_db(cur, level, channel)
+					print "---------------"
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
