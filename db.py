@@ -5,6 +5,8 @@ from datetime import datetime
 import serial
 import math
 import sqlite3
+#import water level functions
+import water_levelRead
 
 #connect to the parse database#
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
@@ -107,13 +109,14 @@ def data_water_collect(identifier, txt=''):
 	#connect to the local database#
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
+	water = water_levelRead.readLevel()
 
 	while True:
 		try:
 			if row_water_count(cur)[0] == 0:
-				insert_water_db(cur, level)
+				insert_water_db(cur, water)
 			else:
-				update_water_db(cur, level)
+				update_water_db(cur, water)
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
