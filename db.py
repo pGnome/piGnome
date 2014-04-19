@@ -51,6 +51,8 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
 		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
+	print "GnomeZone:"
+	print GnomeZone
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
@@ -60,7 +62,6 @@ def data_collect(identifier, txt=''):
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=24)
-	print response.__len__()
   	if response.__len__() == 24:
 		#parse channel number and moisture data from the packet
 		channelRaw = ord(response[4])
@@ -68,7 +69,6 @@ def data_collect(identifier, txt=''):
 			channel = channelRaw / 17
 			data = ord(response[11]) * 256 + ord(response[12]) + 1
 			level = int(data*100/1024)
-			print level
 			while True:
 				try:
 					insert_db(cur, level, channel)
@@ -82,7 +82,6 @@ def data_collect(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	print "collecting data"
 
 ###### WATER LEVEL ######
 #check if water level data exist in the table
@@ -162,12 +161,12 @@ def moisture_setting(identifier, txt=''):
 						insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 					else:
 						update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
-					cur.execute('''SELECT *
-						FROM levelSet
-						''')
-					for record in cur.fetchall():
-						print record
-					break
+					# cur.execute('''SELECT *
+					# 	FROM levelSet
+					# 	''')
+					# for record in cur.fetchall():
+					# 	print record
+					# break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
 	try:
