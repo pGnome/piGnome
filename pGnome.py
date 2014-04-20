@@ -41,6 +41,7 @@ def intervalExecute(interval, func, *args, **argd):
         while True:
             if args[0] == 4:
                 print "---------------"
+                print args
                 if globalVals.pumpOn == False:
                     cancelled.wait(1800.0)
             else:
