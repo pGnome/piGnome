@@ -3,14 +3,13 @@ import time
 import os
 import RPi.GPIO as GPIO
 import array
+import globalVals
 
 # create global variables
 # half hour of seconds the frequency of water level reading when not pumping
 MIN_30 = 1800 
 # frequency when the pump is on
 SEC_5 = 5
-levelReadFreq = SEC_5
-lastLevelRead = -1
 
 def pulse_clock( clk_pin ):
     GPIO.output(clk_pin, True)
@@ -165,14 +164,14 @@ def readLevel():
         
         n = read_adc(CLK, DIN, CS, DOUT)
 
-        print "Inserting: ", n
+#        print "Inserting: ", n
 
         d_level.insert( n )
         
 
         time.sleep(0.3)    # sleep for a milli sec
 
-    
+        print "adding: ", d_level.average()
     return d_level.average()
 
 
@@ -180,14 +179,18 @@ def readLevel():
 # read the water level and update the 'lastReadLevel'
 def periodicReadLevel():
     
-    while true: 
+    while True: 
         # update the last level read
-        lastLevelRead = readLevel()
+        globalVals.waterLevel = readLevel()
+ 
+        print "                    waterLevel: ", globalVals.waterLevel
+ 
         # no we play the waiting game
-        sleep( levelReadFreq )
+        time.sleep( globalVals.waterLevelFreq )
+
 
 
 # set the read frequency to the period
 def set_levelReadFreq( period ):
     
-    levelReadFreq = period
+    globalVals.levelReadFreq = period

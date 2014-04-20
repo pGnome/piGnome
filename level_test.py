@@ -1,4 +1,9 @@
 #!/usr/bin/env python
-import water_levelRead
+import water_levelRead 
+import globalVals
 
-periodicReadLevel()
+globalVals.init()
+
+water_levelRead.periodicReadLevel()
+
+print globalVals.waterLevel
