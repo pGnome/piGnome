@@ -1,30 +1,27 @@
+#weather module
+from parse_rest.connection import register
+from parse_rest.datatypes import Object
 import forecastio
-from datetime import timedelta
-from datetime import datetime
+
+#connect to the parse database#
+register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
+         "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25")
 
 api_key = "7160deca2c6bcb9e35b9bf9b6ade6675"
-oneHour = timedelta(hours=1)
-last_check = 
 
-lat = 47.611
-lng = -122.333
+#location table
+class Location(Object):
+    pass
 
-
-
-byHour = forecast.hourly()
-print byHour.summary
-print "---------------------"
-print byHour.icon
-print "---------------------"
-for hourlyData in byHour.data:
-	#print hourlyData.time
-	print hourlyData.precipProbability
-
-
+#check if the current location is raining
 def isRaining():
-
-
-def forecast():
+	lat = 0
+	lng = 0
+	recentSet = Location.Query.all().order_by("-createdAt")
+	recentOne = recentSet.limit(1)
+	for ob in recentOne:
+		lat = ob.lat
+		lng = ob.lon
 	forecast = forecastio.load_forecast(api_key, lat, lng, units="us")
 	weatherData = forecast.hourly()
 	if weatherData.icon == "rain":

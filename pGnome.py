@@ -40,13 +40,10 @@ def intervalExecute(interval, func, *args, **argd):
     def threadProc(*args, **argd):
         while True:
             if args[0] == 4:
-                print "---------------"
-                print args
                 if globalVals.pumpOn == False:
                     cancelled.wait(1800.0)
             else:
                 cancelled.wait(interval)
-                print "dfsdfdfdsf"
 	    if cancelled.isSet():
                 break
             func(*args, **argd) #: could be a lenthy operation
@@ -76,11 +73,11 @@ if __name__=='__main__':
     myDatabase.commit()
     globalVals.init()
 
-    cancellObj1 = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
-    cancellObj2 = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
-    cancellObj3 = intervalExecute(30.0, db.update_remote_db, 3, 'update_remote_db')
-    cancellObj4 = intervalExecute(1.0, pump.pump_sig, 4, gpio_pins)
-    cancellObj5 = intervalExecute(30.0, db.data_water_collect, 5, 'data_water_collect')
+    data_Collect = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
+    moisture_Setting = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
+    sync_DB = intervalExecute(30.0, db.update_remote_db, 3, 'update_remote_db')
+    pump_Trigger = intervalExecute(5.0, pump.pump_sig, 4, gpio_pins)
+    water_Level = intervalExecute(30.0, db.data_water_collect, 5, 'data_water_collect')
     
     #print cancellObj() #: cancel the intervalExecute timer.
     #print 'after calling close'

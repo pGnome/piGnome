@@ -2,6 +2,7 @@
 import sqlite3
 import RPi.GPIO as GPIO
 import globalVals
+import weather
 
 def pump_sig(identifier,gpio_pins):
 	unlock_db("myDBfile.sqlite3")
@@ -36,8 +37,9 @@ def pump_sig(identifier,gpio_pins):
 					GPIO.output(gpio_pins[i], GPIO.HIGH)
 
 			if globalVals.pumpOn:
-				GPIO.output(gpio_pins[0], GPIO.HIGH)
-				print "turning pump on"
+				if weather.isRaining() == False:
+					GPIO.output(gpio_pins[0], GPIO.HIGH)
+					print "turning pump on"
 			else:
 				GPIO.output(gpio_pins[0], GPIO.LOW)
 				print "turning pump off"
