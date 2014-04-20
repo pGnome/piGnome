@@ -15,6 +15,7 @@ class Location(Object):
 
 #check if the current location is raining
 def isRaining():
+	print "testing weather"
 	lat = 0
 	lng = 0
 	recentSet = Location.Query.all().order_by("-createdAt")
