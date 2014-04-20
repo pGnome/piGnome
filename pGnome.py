@@ -46,6 +46,7 @@ def intervalExecute(interval, func, *args, **argd):
                     cancelled.wait(1800.0)
             else:
                 cancelled.wait(interval)
+                print "dfsdfdfdsf"
 	    if cancelled.isSet():
                 break
             func(*args, **argd) #: could be a lenthy operation
