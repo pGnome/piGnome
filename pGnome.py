@@ -6,6 +6,7 @@ import serial
 #python modules for pGnome
 import db
 import pump
+import globalVals
 
 #connect to the local database#
 myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
@@ -18,6 +19,7 @@ zone1 = 11
 zone2 = 12
 zone3 = 13
 gpio_pins = [pumpOut,zone1,zone2,zone3]
+
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
@@ -37,6 +39,11 @@ def intervalExecute(interval, func, *args, **argd):
     cancelled = threading.Event()
     def threadProc(*args, **argd):
         while True:
+            if *args == 4:
+                if globalVals.pump == False:
+                    interval = 1800.0
+                else:
+                    interval = 1.0
             cancelled.wait(interval)
 	    if cancelled.isSet():
                 break
@@ -65,6 +72,7 @@ if __name__=='__main__':
     cur = myDatabase.cursor()
     db.init_tables()
     myDatabase.commit()
+    globalVals.init()
 
     cancellObj1 = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
     cancellObj2 = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')

@@ -1,6 +1,7 @@
 #multi-zone pump triggering#
 import sqlite3
 import RPi.GPIO as GPIO
+import globalVals
 
 def pump_sig(identifier,gpio_pins):
 	unlock_db("myDBfile.sqlite3")
@@ -24,26 +25,24 @@ def pump_sig(identifier,gpio_pins):
 			for setting in settings:
 				zoneArray.append(setting[0])
 
-			pumpOn = False
+			globalVals.pumpOn = False
 			for i in range(1, 4):
 				if i in zoneArray:
 					GPIO.output(gpio_pins[i], GPIO.LOW)
-					pumpOn = True
+					globalVals.pumpOn = True
 					print "watering zone "
 					print i
 				else:
 					GPIO.output(gpio_pins[i], GPIO.HIGH)
 
-			if pumpOn:
+			if globalVals.pumpOn:
 				GPIO.output(gpio_pins[0], GPIO.HIGH)
 				print "turning pump on"
 			else:
 				GPIO.output(gpio_pins[0], GPIO.LOW)
 				print "turning pump off"
 
-
-
-			break;
+			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
 
