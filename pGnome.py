@@ -39,12 +39,11 @@ def intervalExecute(interval, func, *args, **argd):
     cancelled = threading.Event()
     def threadProc(*args, **argd):
         while True:
-            if *args == 4:
+            if args[0] == 4:
                 if globalVals.pump == False:
-                    interval = 1800.0
-                else:
-                    interval = 1.0
-            cancelled.wait(interval)
+                    cancelled.wait(1800.0)
+            else:
+                cancelled.wait(interval)
 	    if cancelled.isSet():
                 break
             func(*args, **argd) #: could be a lenthy operation
