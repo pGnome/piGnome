@@ -40,7 +40,7 @@ def intervalExecute(interval, func, *args, **argd):
     def threadProc(*args, **argd):
         while True:
             if args[0] == 4:
-                if globalVals.pump == False:
+                if globalVals.pumpOn == False:
                     cancelled.wait(1800.0)
             else:
                 cancelled.wait(interval)
