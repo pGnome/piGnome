@@ -3,7 +3,6 @@
 import time
 from datetime import timedelta
 from datetime import datetime
-import dateutil.parser as parser
 import weather
 import globalVals
 

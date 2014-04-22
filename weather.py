@@ -1,6 +1,7 @@
 #weather module
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
+import dateutil.parser as parser
 import forecastio
 import globalVals
 
