@@ -199,8 +199,17 @@ def update_remote_db(identifier,txt=''):
 			cur.execute('''SELECT *
 				FROM pGnome
 				''')
-			for record in cur.fetchall():
+			moistureRecords = cur.fetchall()
+			cur.execute('''SELECT *
+				FROM waterLevel
+				''')
+			waterLevels = cur.fetchall()
+			for record in moistureRecords:
 				gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
+				gnomeScore.save()
+				print record
+			for record in waterLevels:
+				gnomeScore = Barrel(level=record[1], collectedTime=record[2])
 				gnomeScore.save()
 				print record
 			break

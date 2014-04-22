@@ -183,7 +183,7 @@ def periodicReadLevel():
         # update the last level read
         globalVals.waterLevel = readLevel()
  
-        print "                    waterLevel: ", globalVals.waterLevel
+        print "waterLevel: ", globalVals.waterLevel
  
         # no we play the waiting game
         time.sleep( globalVals.waterLevelFreq )
