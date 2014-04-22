@@ -47,6 +47,7 @@ def intervalExecute(interval, func, *args, **argd):
                 elif globalVals.pumpOn == True:
                     cancelled.wait(interval)
             else:
+                print args[0]
                 cancelled.wait(interval)
 	    if cancelled.isSet():
                 break

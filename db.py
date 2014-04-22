@@ -70,6 +70,7 @@ def data_collect(identifier, txt=''):
 	#xbee input
 	serialport = serial.Serial("/dev/ttyAMA0", 9600, timeout=5.5)
 	response = serialport.read(size=24)
+	print response.__len__()
   	if response.__len__() == 24:
 		#parse channel number and moisture data from the packet
 		channelRaw = ord(response[4])
@@ -92,49 +93,49 @@ def data_collect(identifier, txt=''):
 	print "data_collect"
 
 
-###### WATER LEVEL ######
-#check if water level data exist in the table
-def row_water_count (cur):
-	cur.execute('''SELECT count(*)
-		FROM waterLevel
-		''')
-	return cur.fetchall()[0]
-#inserting data from moisture sensors#
-def insert_water_db(cur, waterLevel):
-	cur.execute('''INSERT INTO waterLevel
-		(RecordId, waterLevel, CollectedTime)
-		VALUES (NULL,?,?)''', (waterLevel, datetime.now()))
-#update data from moisture sensors#
-def update_water_db(cur, waterLevel):
-	cur.execute('''UPDATE waterLevel
-		SET MoistureLevel = ?, CollectedTime = ?
-		WHERE RecordId = 1''', (waterLevel, datetime.now()))
+# ###### WATER LEVEL ######
+# #check if water level data exist in the table
+# def row_water_count (cur):
+# 	cur.execute('''SELECT count(*)
+# 		FROM waterLevel
+# 		''')
+# 	return cur.fetchall()[0]
+# #inserting data from moisture sensors#
+# def insert_water_db(cur, waterLevel):
+# 	cur.execute('''INSERT INTO waterLevel
+# 		(RecordId, waterLevel, CollectedTime)
+# 		VALUES (NULL,?,?)''', (waterLevel, datetime.now()))
+# #update data from moisture sensors#
+# def update_water_db(cur, waterLevel):
+# 	cur.execute('''UPDATE waterLevel
+# 		SET MoistureLevel = ?, CollectedTime = ?
+# 		WHERE RecordId = 1''', (waterLevel, datetime.now()))
 
-#main method to collect current water level data#
-def data_water_collect(identifier, txt=''):
-	unlock_db("myDBfile.sqlite3")
-	#connect to the local database#
-	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
-	cur = myDatabase.cursor()
-	water = water_levelRead.readLevel()
+# #main method to collect current water level data#
+# def data_water_collect(identifier, txt=''):
+# 	unlock_db("myDBfile.sqlite3")
+# 	#connect to the local database#
+# 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+# 	cur = myDatabase.cursor()
+# 	water = water_levelRead.readLevel()
 
-	while True:
-		try:
-			if row_water_count(cur)[0] == 0:
-				insert_water_db(cur, water)
-			else:
-				update_water_db(cur, water)
-			break
-		except Exception:
-			unlock_db("myDBfile.sqlite3")
+# 	while True:
+# 		try:
+# 			if row_water_count(cur)[0] == 0:
+# 				insert_water_db(cur, water)
+# 			else:
+# 				update_water_db(cur, water)
+# 			break
+# 		except Exception:
+# 			unlock_db("myDBfile.sqlite3")
 			
-	try:
-		myDatabase.commit()
-		myDatabase.close()
-	except Exception:
-		myDatabase.rollback()
+# 	try:
+# 		myDatabase.commit()
+# 		myDatabase.close()
+# 	except Exception:
+# 		myDatabase.rollback()
 
-	print "data_water_collect"
+# 	print "data_water_collect"
 
 
 ###### MOISTURE SETTING ######
