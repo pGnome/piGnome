@@ -89,6 +89,7 @@ def data_collect(identifier, txt=''):
 		myDatabase.close()
 	except Exception:
 		myDatabase.rollback()
+	print "data_collect"
 
 
 ###### WATER LEVEL ######
@@ -133,7 +134,7 @@ def data_water_collect(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	# print identifier
+	print "data_water_collect"
 
 
 ###### MOISTURE SETTING ######
@@ -184,7 +185,7 @@ def moisture_setting(identifier, txt=''):
 	except Exception:
 		myDatabase.rollback()
 
-	# print identifier
+	print "moisture_setting"
 
 
 ###### SYNCING DATABASE ######
@@ -222,7 +223,7 @@ def update_remote_db(identifier,txt=''):
 	except Exception:
 		myDatabase.rollback()
 	
-	# print identifier
+	print "update_remote_db"
 
 #prevent database locking issue
 def unlock_db(db_filename):
