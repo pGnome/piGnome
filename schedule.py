@@ -14,6 +14,8 @@ def isTime():
 		timeIntervalLeft = datetime.now() - timedelta(hours=4) - timedelta(minutes=half_duration)
 		timeIntervalRight = timeIntervalLeft + timedelta(minutes=globalVals.watering_duration)
 		if timeIntervalLeft.strftime("%X") < scheduleTime and scheduleTime < timeIntervalRight.strftime("%X"):
+			print timeIntervalLeft
+			print timeIntervalRight
 			print "time to water"
 			return True
 	print "is not the time"
