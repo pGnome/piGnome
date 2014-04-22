@@ -52,10 +52,9 @@ def pump_sig(identifier,gpio_pins):
 					else:
 						GPIO.output(gpio_pins[i], GPIO.HIGH)
 
-				if globalVals.pumpOn:
-					if weather.isRaining() == False:
-						GPIO.output(gpio_pins[0], GPIO.HIGH)
-						print "turning pump on"
+				if globalVals.pumpOn and weather.isRaining() == False:
+					GPIO.output(gpio_pins[0], GPIO.HIGH)
+					print "turning pump on"
 				else:
 					GPIO.output(gpio_pins[0], GPIO.LOW)
 					print "turning pump off"
