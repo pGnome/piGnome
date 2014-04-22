@@ -2,6 +2,7 @@
 from parse_rest.connection import register
 from parse_rest.datatypes import Object
 from datetime import datetime
+from datetime import timedelta
 import serial
 import math
 import sqlite3
@@ -58,7 +59,7 @@ def init_tables():
 def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
 		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
-		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()))
+		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()- timedelta(hours=4)))
 	print "GnomeZone:"
 	print GnomeZone
 #main method to collect current mositure level data#
@@ -104,12 +105,12 @@ def data_collect(identifier, txt=''):
 # def insert_water_db(cur, waterLevel):
 # 	cur.execute('''INSERT INTO waterLevel
 # 		(RecordId, waterLevel, CollectedTime)
-# 		VALUES (NULL,?,?)''', (waterLevel, datetime.now()))
+# 		VALUES (NULL,?,?)''', (waterLevel, datetime.now()- timedelta(hours=4)))
 # #update data from moisture sensors#
 # def update_water_db(cur, waterLevel):
 # 	cur.execute('''UPDATE waterLevel
 # 		SET MoistureLevel = ?, CollectedTime = ?
-# 		WHERE RecordId = 1''', (waterLevel, datetime.now()))
+# 		WHERE RecordId = 1''', (waterLevel, datetime.now()- timedelta(hours=4)))
 
 # #main method to collect current water level data#
 # def data_water_collect(identifier, txt=''):
