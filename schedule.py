@@ -10,7 +10,7 @@ def isTime():
 	currentDate = time.strftime("%A")
 	scheduleTime = weather.getTodayScheduleTime(currentDate)
 	if scheduleTime != "":
-		half_duration = watering_duration/2
+		half_duration = globalVals.watering_duration/2
 		timeIntervalLeft = datetime.now() - timedelta(minutes=half_duration)
 		timeIntervalRight = timeIntervalLeft + timedelta(minutes=globalVals.watering_duration)
 		if timeIntervalLeft.strftime("%X") < scheduleTime and scheduleTime < timeIntervalRight.strftime("%X"):
