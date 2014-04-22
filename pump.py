@@ -3,56 +3,72 @@ import sqlite3
 import RPi.GPIO as GPIO
 import globalVals
 import weather
+import schedule
 
 def pump_sig(identifier,gpio_pins):
-	unlock_db("myDBfile.sqlite3")
-	#connect to the local database#
-	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
-	cur = myDatabase.cursor()
-
-	while True:
-		try:
-			cur.execute('''SELECT gnomeRecords.GnomeZone
-				FROM (SELECT MoistureLevel, GnomeZone, MAX(RecordId) as gnomeId
-					  FROM pGnome
-					  GROUP BY GnomeZone) as gnomeRecords, levelSet
-				WHERE gnomeRecords.GnomeZone = levelSet.GnomeZone AND
-					  gnomeRecords.MoistureLevel < levelSet.MoistureLevel
-				''')
-			settings = cur.fetchall()
-			
-			zoneArray = []
-
-			for setting in settings:
-				zoneArray.append(setting[0])
-
+	db.updateManual()
+	if globalVals.manual:
+		if schedule.isTime() && !globalVals.pumpOn:
+			GPIO.output(gpio_pins[0], GPIO.HIGH)
+			GPIO.output(gpio_pins[1], GPIO.LOW)
+			GPIO.output(gpio_pins[2], GPIO.LOW)
+			GPIO.output(gpio_pins[3], GPIO.LOW)
+			globalVals.pumpOn = True
+		else:
+			GPIO.output(gpio_pins[0], GPIO.LOW)
+			GPIO.output(gpio_pins[1], GPIO.HIGH)
+			GPIO.output(gpio_pins[2], GPIO.HIGH)
+			GPIO.output(gpio_pins[3], GPIO.HIGH)
 			globalVals.pumpOn = False
-			for i in range(1, 4):
-				if i in zoneArray:
-					GPIO.output(gpio_pins[i], GPIO.LOW)
-					globalVals.pumpOn = True
-					print "watering zone "
-					print i
+	else:
+		unlock_db("myDBfile.sqlite3")
+		#connect to the local database#
+		myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
+		cur = myDatabase.cursor()
+
+		while True:
+			try:
+				cur.execute('''SELECT gnomeRecords.GnomeZone
+					FROM (SELECT MoistureLevel, GnomeZone, MAX(RecordId) as gnomeId
+						  FROM pGnome
+						  GROUP BY GnomeZone) as gnomeRecords, levelSet
+					WHERE gnomeRecords.GnomeZone = levelSet.GnomeZone AND
+						  gnomeRecords.MoistureLevel < levelSet.MoistureLevel
+					''')
+				settings = cur.fetchall()
+				
+				zoneArray = []
+
+				for setting in settings:
+					zoneArray.append(setting[0])
+
+				globalVals.pumpOn = False
+				for i in range(1, 4):
+					if i in zoneArray:
+						GPIO.output(gpio_pins[i], GPIO.LOW)
+						globalVals.pumpOn = True
+						print "watering zone "
+						print i
+					else:
+						GPIO.output(gpio_pins[i], GPIO.HIGH)
+
+				if globalVals.pumpOn:
+					if weather.isRaining() == False:
+						GPIO.output(gpio_pins[0], GPIO.HIGH)
+						print "turning pump on"
 				else:
-					GPIO.output(gpio_pins[i], GPIO.HIGH)
+					GPIO.output(gpio_pins[0], GPIO.LOW)
+					print "turning pump off"
 
-			if globalVals.pumpOn:
-				if weather.isRaining() == False:
-					GPIO.output(gpio_pins[0], GPIO.HIGH)
-					print "turning pump on"
-			else:
-				GPIO.output(gpio_pins[0], GPIO.LOW)
-				print "turning pump off"
+				break
+			except Exception:
+				unlock_db("myDBfile.sqlite3")
 
-			break
+		try:	
+			myDatabase.commit()
+			myDatabase.close()
 		except Exception:
-			unlock_db("myDBfile.sqlite3")
-
-	try:	
-		myDatabase.commit()
-		myDatabase.close()
-	except Exception:
-		myDatabase.rollback()
+			myDatabase.rollback()
 
 	#print identifier
 

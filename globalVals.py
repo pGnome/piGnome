@@ -4,6 +4,14 @@ def init():
     global pumpOn
     pumpOn = True
 
+    #True, if manual override scheduling is on
+    #False, otherwise
+    global manual
+    manual = False
+
+    global watering_duration
+    watering_duration = 1.0;
+
     # last updated water level
     # initialized to -1, if the value is -1 it means that it has
     # not yet read the value from the pump

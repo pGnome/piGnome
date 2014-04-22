@@ -5,8 +5,11 @@ from datetime import datetime
 import serial
 import math
 import sqlite3
+import dateutil.parser as parser
+import time
 #import water level functions
 import water_levelRead
+
 
 #connect to the parse database#
 register("28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
@@ -20,6 +23,7 @@ class MoistureSetting(Object):
 #water level table
 class Barrel(Object):
     pass
+
 
 #initialize database#
 def init_data_db(cur):
@@ -46,6 +50,8 @@ def init_tables():
 		myDatabase.close()
 	except Exception:
 		myDatabase.rollback()
+
+
 
 ###### MOISTURE LEVEL ######
 #inserting data from moisture sensors#

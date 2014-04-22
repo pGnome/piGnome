@@ -40,8 +40,12 @@ def intervalExecute(interval, func, *args, **argd):
     def threadProc(*args, **argd):
         while True:
             if args[0] == 4:
-                if globalVals.pumpOn == False:
+                if globalVals.manual == True:
+                    cancelled.wait(globalVals.watering_duration)
+                elif globalVals.pumpOn == False:
                     cancelled.wait(30.0)
+                elif globalVals.pumpOn == True:
+                    cancelled.wait(interval)
             else:
                 cancelled.wait(interval)
 	    if cancelled.isSet():
