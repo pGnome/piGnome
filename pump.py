@@ -8,7 +8,7 @@ import schedule
 def pump_sig(identifier,gpio_pins):
 	db.updateManual()
 	if globalVals.manual:
-		if schedule.isTime() && !globalVals.pumpOn:
+		if schedule.isTime() and !globalVals.pumpOn:
 			GPIO.output(gpio_pins[0], GPIO.HIGH)
 			GPIO.output(gpio_pins[1], GPIO.LOW)
 			GPIO.output(gpio_pins[2], GPIO.LOW)
