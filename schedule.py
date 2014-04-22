@@ -11,11 +11,9 @@ def isTime():
 	scheduleTime = weather.getTodayScheduleTime(currentDate)
 	if scheduleTime != "":
 		half_duration = globalVals.watering_duration/2
-		timeIntervalLeft = datetime.now() - timedelta(hours=4) - timedelta(minutes=half_duration)
-		timeIntervalRight = timeIntervalLeft + timedelta(minutes=globalVals.watering_duration)
+		timeIntervalLeft = datetime.now() - timedelta(hours=4) - timedelta(seconds=half_duration)
+		timeIntervalRight = timeIntervalLeft + timedelta(seconds=globalVals.watering_duration)
 		if timeIntervalLeft.strftime("%X") < scheduleTime and scheduleTime < timeIntervalRight.strftime("%X"):
-			print timeIntervalLeft
-			print timeIntervalRight
 			print "time to water"
 			return True
 	print "is not the time"
