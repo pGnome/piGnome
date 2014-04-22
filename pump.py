@@ -14,12 +14,14 @@ def pump_sig(identifier,gpio_pins):
 			GPIO.output(gpio_pins[2], GPIO.LOW)
 			GPIO.output(gpio_pins[3], GPIO.LOW)
 			globalVals.pumpOn = True
+			print "turning pump on"
 		else:
 			GPIO.output(gpio_pins[0], GPIO.LOW)
 			GPIO.output(gpio_pins[1], GPIO.HIGH)
 			GPIO.output(gpio_pins[2], GPIO.HIGH)
 			GPIO.output(gpio_pins[3], GPIO.HIGH)
 			globalVals.pumpOn = False
+			print "turning pump off"
 	else:
 		unlock_db("myDBfile.sqlite3")
 		#connect to the local database#
