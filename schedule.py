@@ -9,7 +9,7 @@ import globalVals
 
 def isTime():
 	currentDate = time.strftime("%A")
-	scheduleTime = db.getTodayScheduleTime(currentDate)
+	scheduleTime = weather.getTodayScheduleTime(currentDate)
 	if scheduleTime != "":
 		half_duration = watering_duration/2
 		timeIntervalLeft = datetime.now() - timedelta(minutes=half_duration)

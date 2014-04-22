@@ -6,7 +6,7 @@ import weather
 import schedule
 
 def pump_sig(identifier,gpio_pins):
-	db.updateManual()
+	weather.updateManual()
 	if globalVals.manual:
 		if schedule.isTime() and not(globalVals.pumpOn):
 			GPIO.output(gpio_pins[0], GPIO.HIGH)
