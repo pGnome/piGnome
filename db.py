@@ -176,7 +176,7 @@ def moisture_setting(identifier, txt=''):
 					# 	''')
 					# for record in cur.fetchall():
 					# 	print record
-					# break
+					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
 	try:
