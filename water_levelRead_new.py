@@ -183,8 +183,8 @@ def readLevel():
 
     if level > 0 and level < 100:
         globalVals.waterLevel = level
-
-    level = -1
+    else:
+        level = -1
 
     return level
         
