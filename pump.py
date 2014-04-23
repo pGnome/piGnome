@@ -9,8 +9,8 @@ import schedule
 import water_levelRead_new
 
 #connect to the twilio account
-account_sid = "ACbe930b1493894647f69ac1c37d5a04f8"
-auth_token = "780b46e00098205b4fa6b230ae337c8e"
+account_sid = "ACfb95b68c67b1c421fb351e537fd09421"
+auth_token = "6d3a13db188b7d2603b8bfbf75c59f41"
 client = TwilioRestClient(account_sid, auth_token)
 
 def pump_sig(identifier,gpio_pins):
