@@ -208,9 +208,10 @@ def update_remote_db(identifier,txt=''):
 		try:
 			cur.execute('''SELECT *
 				FROM pGnome
-				ORDER BY RecordId DESC
+				WHERE RecordId = MAX(RecordId)
 				''')
 			moistureRecords = cur.fetchone()
+			print "success!"
 			cur.execute('''SELECT *
 				FROM waterLevel
 				''')
