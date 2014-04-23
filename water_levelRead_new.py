@@ -186,6 +186,9 @@ def readLevel():
     else:
         level = -1
 
+    if level > (globalVals.waterLevelThreshold + 5):
+        globalVals.isSent = False
+
     return level
         
 
