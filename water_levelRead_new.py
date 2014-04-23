@@ -168,15 +168,18 @@ def readLevel():
         
         n = read_adc(CLK, DIN, CS, DOUT)
 
-#        print "Inserting: ", n
+        print "Inserting: ", n
 
         d_level.insert( n )
         
 
         time.sleep(0.3)    # sleep for a milli sec
 
+    raw = d_level.average()
 
-    level = depth2percent( resist2depth( voltage2resist( digit2analog( d_level.average() ) ) ) )
+    print "raw averate: ", raw
+
+    level = depth2percent( resist2depth( voltage2resist( digit2analog( raw ) ) ) )
 
     globalVals.waterLevel = level
 
