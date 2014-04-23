@@ -30,3 +30,7 @@ def init():
     global waterLevelThreshold
     waterLevelThreshold = 17
 
+    #indicator weather text message has sent
+    global isSent
+    isSent = False
+
