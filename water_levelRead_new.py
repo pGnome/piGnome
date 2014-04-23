@@ -168,12 +168,14 @@ def readLevel():
         
         n = read_adc(CLK, DIN, CS, DOUT)
 
+        time.sleep(0.5) 
+
         print "Inserting: ", n
 
         d_level.insert( n )
         
 
-        time.sleep(0.3)    # sleep for a milli sec
+        #time.sleep(0.5)    # sleep for a milli sec
 
     raw = d_level.average()
 

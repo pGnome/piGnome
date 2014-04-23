@@ -126,23 +126,23 @@ def data_water_collect(identifier, txt=''):
 	cur = myDatabase.cursor()
 	water = water_levelRead_new.readLevel()
 	print water
-	while True:
-		try:
-			insert_water_db(cur, water)
-			print water
-			# if row_water_count(cur)[0] == 0:
-			# 	insert_water_db(cur, water)
-			# else:
-			# 	update_water_db(cur, water)
-			break
-		except Exception:
-			unlock_db("myDBfile.sqlite3")
+	if water > 0 and water < 100:
+		while True:
+			try:
+				insert_water_db(cur, water)
+				# if row_water_count(cur)[0] == 0:
+				# 	insert_water_db(cur, water)
+				# else:
+				# 	update_water_db(cur, water)
+				break
+			except Exception:
+				unlock_db("myDBfile.sqlite3")
 			
-	try:
-		myDatabase.commit()
-		myDatabase.close()
-	except Exception:
-		myDatabase.rollback()
+		try:
+			myDatabase.commit()
+			myDatabase.close()
+		except Exception:
+			myDatabase.rollback()
 
 	print "data_water_collect"
 	print water
