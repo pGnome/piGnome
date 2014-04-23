@@ -1,6 +1,7 @@
 #multi-zone pump triggering#
 import sqlite3
 import RPi.GPIO as GPIO
+import json,httplib
 import globalVals
 import weather
 import schedule
@@ -83,6 +84,16 @@ def pump_override(identifier,gpio_pins):
 		GPIO.output(gpio_pins[1], GPIO.HIGH)
 		GPIO.output(gpio_pins[2], GPIO.HIGH)
 		GPIO.output(gpio_pins[3], GPIO.HIGH)
+		connection = httplib.HTTPSConnection('api.parse.com', 443)
+		connection.connect()
+		connection.request('POST', '/1/functions/sendSMS', json.dumps({
+		     }), {
+		       "X-Parse-Application-Id": "28PBuP52sksBKQskvbMEyny2jVhaECzQ72gyIqsI",
+		       "X-Parse-REST-API-Key": "ZVYfNMONIiMD9XLEhhUKJqZh4tuHNBRiFPCLnx25",
+		       "Content-Type": "application/json"
+		     })
+		result = json.loads(connection.getresponse().read())
+
 		globalVals.pumpOn = False
 		print "turning pump off"
 		print "pump_override"
