@@ -7,22 +7,22 @@ import weather
 import schedule
 import water_levelRead_new
 
-def pump_sig(identifier,txt=''):
-	gpio_pins = [globalVals.zone1,globalVals.zone2,globalVals.zone3]
+def pump_sig(identifier,gpio_pins):
+
 	weather.updateManual()
 	if globalVals.manual:
 		if schedule.isTime() and not(globalVals.pumpOn) and globalVals.waterLevel > globalVals.waterLevelThreshold:
-			GPIO.output(globalVals.pumpOut, GPIO.HIGH)
-			GPIO.output(globalVals.zone1, GPIO.LOW)
-			GPIO.output(globalVals.zone2, GPIO.LOW)
-			GPIO.output(globalVals.zone3, GPIO.LOW)
+			GPIO.output(gpio_pins[0], GPIO.HIGH)
+			GPIO.output(gpio_pins[1], GPIO.LOW)
+			GPIO.output(gpio_pins[2], GPIO.LOW)
+			GPIO.output(gpio_pins[3], GPIO.LOW)
 			globalVals.pumpOn = True
 			print "turning pump on"
 		else:
-			GPIO.output(globalVals.pumpOut, GPIO.LOW)
-			GPIO.output(globalVals.zone1, GPIO.HIGH)
-			GPIO.output(globalVals.zone2, GPIO.HIGH)
-			GPIO.output(globalVals.zone3, GPIO.HIGH)
+			GPIO.output(gpio_pins[0], GPIO.LOW)
+			GPIO.output(gpio_pins[1], GPIO.HIGH)
+			GPIO.output(gpio_pins[2], GPIO.HIGH)
+			GPIO.output(gpio_pins[3], GPIO.HIGH)
 			globalVals.pumpOn = False
 			print "turning pump off"
 	else:
@@ -51,18 +51,18 @@ def pump_sig(identifier,txt=''):
 				for i in range(1, 4):
 					if globalVals.waterLevel > globalVals.waterLevelThreshold and weather.isRaining() == False:
 						if i in zoneArray:
-							GPIO.output(gpio_pins[i-1], GPIO.LOW)
+							GPIO.output(gpio_pins[i], GPIO.LOW)
 							globalVals.pumpOn = True
 							print "watering zone "
 							print i
 						else:
-							GPIO.output(gpio_pins[i-1], GPIO.HIGH)
+							GPIO.output(gpio_pins[i], GPIO.HIGH)
 
 				if globalVals.pumpOn and weather.isRaining() == False and globalVals.waterLevel > globalVals.waterLevelThreshold:
-					GPIO.output(globalVals.pumpOut, GPIO.HIGH)
+					GPIO.output(gpio_pins[0], GPIO.HIGH)
 					print "turning pump on"
 				else:
-					GPIO.output(globalVals.pumpOut, GPIO.LOW)
+					GPIO.output(gpio_pins[0], GPIO.LOW)
 					print "turning pump off"
 
 				break
@@ -77,13 +77,13 @@ def pump_sig(identifier,txt=''):
 
 	#print identifier
 
-def pump_override(identifier,txt=''):
+def pump_override(identifier,gpio_pins):
 	water_levelRead_new.readLevel()
 	if globalVals.waterLevel < globalVals.waterLevelThreshold:
-		GPIO.output(globalVals.pumpOut, GPIO.LOW)
-		GPIO.output(globalVals.zone1, GPIO.HIGH)
-		GPIO.output(globalVals.zone2, GPIO.HIGH)
-		GPIO.output(globalVals.zone3, GPIO.HIGH)
+		GPIO.output(gpio_pins[0], GPIO.LOW)
+		GPIO.output(gpio_pins[1], GPIO.HIGH)
+		GPIO.output(gpio_pins[2], GPIO.HIGH)
+		GPIO.output(gpio_pins[3], GPIO.HIGH)
 		connection = httplib.HTTPSConnection('api.parse.com', 443)
 		connection.connect()
 		connection.request('POST', '/1/functions/sendSMS', json.dumps({

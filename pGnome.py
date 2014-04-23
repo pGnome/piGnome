@@ -13,15 +13,22 @@ myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 
 #GPIO settings#
 
+#PINOUT NUMBER#
+pumpOut = 12
+zone1 = 11
+zone2 = 13
+zone3 = 15
+gpio_pins = [pumpOut,zone1,zone2,zone3]
+
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 #pump GPIO pin
-GPIO.setup(globalVals.pumpOut, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(pumpOut, GPIO.OUT, initial=GPIO.LOW)
 #zone GPIO pins
-GPIO.setup(globalVals.zone1, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(globalVals.zone2, GPIO.OUT, initial=GPIO.HIGH)
-GPIO.setup(globalVals.zone3, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(zone1, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(zone2, GPIO.OUT, initial=GPIO.HIGH)
+GPIO.setup(zone3, GPIO.OUT, initial=GPIO.HIGH)
 
 
 
@@ -74,9 +81,9 @@ if __name__=='__main__':
     data_Collect = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
     moisture_Setting = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
     sync_DB = intervalExecute(30.0, db.update_remote_db, 3, 'update_remote_db')
-    pump_Trigger = intervalExecute(5.0, pump.pump_sig, 4, 'pump_trigger')
+    pump_Trigger = intervalExecute(5.0, pump.pump_sig, 4, gpio_pins)
     water_Level = intervalExecute(10.0, db.data_water_collect, 5, 'data_water_collect')
-    pump_override = intervalExecute(1.0, pump.pump_override, 6, 'pump_override')
+    pump_override = intervalExecute(1.0, pump.pump_override, 6, gpio_pins)
     
     #print cancellObj() #: cancel the intervalExecute timer.
     #print 'after calling close'
