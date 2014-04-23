@@ -4,11 +4,13 @@ import RPi.GPIO as GPIO
 import globalVals
 import weather
 import schedule
+import water_levelRead
 
 def pump_sig(identifier,gpio_pins):
+
 	weather.updateManual()
 	if globalVals.manual:
-		if schedule.isTime() and not(globalVals.pumpOn):
+		if schedule.isTime() and not(globalVals.pumpOn) and globalVals.waterLevel > globalVals.waterLevelThreshold:
 			GPIO.output(gpio_pins[0], GPIO.HIGH)
 			GPIO.output(gpio_pins[1], GPIO.LOW)
 			GPIO.output(gpio_pins[2], GPIO.LOW)
@@ -46,15 +48,16 @@ def pump_sig(identifier,gpio_pins):
 
 				globalVals.pumpOn = False
 				for i in range(1, 4):
-					if i in zoneArray:
-						GPIO.output(gpio_pins[i], GPIO.LOW)
-						globalVals.pumpOn = True
-						print "watering zone "
-						print i
-					else:
-						GPIO.output(gpio_pins[i], GPIO.HIGH)
+					if globalVals.waterLevel > globalVals.waterLevelThreshold and weather.isRaining() == False:
+						if i in zoneArray:
+							GPIO.output(gpio_pins[i], GPIO.LOW)
+							globalVals.pumpOn = True
+							print "watering zone "
+							print i
+						else:
+							GPIO.output(gpio_pins[i], GPIO.HIGH)
 
-				if globalVals.pumpOn and weather.isRaining() == False:
+				if globalVals.pumpOn and weather.isRaining() == False and globalVals.waterLevel > globalVals.waterLevelThreshold:
 					GPIO.output(gpio_pins[0], GPIO.HIGH)
 					print "turning pump on"
 				else:
@@ -72,6 +75,16 @@ def pump_sig(identifier,gpio_pins):
 			myDatabase.rollback()
 
 	#print identifier
+
+def pump_override():
+	water_levelRead.readLevel()
+	if globalVals.waterLevel < globalVals.waterLevelThreshold:
+		GPIO.output(gpio_pins[0], GPIO.LOW)
+		GPIO.output(gpio_pins[1], GPIO.HIGH)
+		GPIO.output(gpio_pins[2], GPIO.HIGH)
+		GPIO.output(gpio_pins[3], GPIO.HIGH)
+		globalVals.pumpOn = False
+		print "turning pump off"
 
 def unlock_db(db_filename):
     connection = sqlite3.connect(db_filename)

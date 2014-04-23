@@ -25,3 +25,7 @@ def init():
     # period at which the water level is checked in seconds
     global waterLevelFreq
     waterLevelFreq = 5
+
+    #Water level threshold
+    global waterLevelThreshold
+    waterLevelThreshold = 20
