@@ -102,21 +102,21 @@ def data_collect(identifier, txt=''):
 
 ###### WATER LEVEL ######
 #check if water level data exist in the table
-def row_water_count (cur):
-	cur.execute('''SELECT count(*)
-		FROM waterLevel
-		''')
-	return cur.fetchall()[0]
+# def row_water_count (cur):
+# 	cur.execute('''SELECT count(*)
+# 		FROM waterLevel
+# 		''')
+# 	return cur.fetchall()[0]
 #inserting data from moisture sensors#
 def insert_water_db(cur, waterLevel):
 	cur.execute('''INSERT INTO waterLevel
 		(RecordId, waterLevel, CollectedTime)
 		VALUES (NULL,?,?)''', (waterLevel, datetime.now()- timedelta(hours=4)))
 #update data from moisture sensors#
-def update_water_db(cur, waterLevel):
-	cur.execute('''UPDATE waterLevel
-		SET MoistureLevel = ?, CollectedTime = ?
-		WHERE RecordId = 1''', (waterLevel, datetime.now()- timedelta(hours=4)))
+# def update_water_db(cur, waterLevel):
+# 	cur.execute('''UPDATE waterLevel
+# 		SET MoistureLevel = ?, CollectedTime = ?
+# 		WHERE RecordId = 1''', (waterLevel, datetime.now()- timedelta(hours=4)))
 
 #main method to collect current water level data#
 def data_water_collect(identifier, txt=''):
@@ -125,10 +125,11 @@ def data_water_collect(identifier, txt=''):
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
 	water = water_levelRead_new.readLevel()
-
+	print water
 	while True:
 		try:
 			insert_water_db(cur, water)
+			print water
 			# if row_water_count(cur)[0] == 0:
 			# 	insert_water_db(cur, water)
 			# else:
