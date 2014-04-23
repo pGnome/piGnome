@@ -125,6 +125,7 @@ def data_water_collect(identifier, txt=''):
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
 	water = water_levelRead_new.readLevel()
+	print water
 	if water != -1:
 		while True:
 			try:
@@ -132,7 +133,7 @@ def data_water_collect(identifier, txt=''):
 					insert_water_db(cur, water)
 				else:
 					update_water_db(cur, water)
-				print water
+
 				break
 			except Exception:
 				unlock_db("myDBfile.sqlite3")
