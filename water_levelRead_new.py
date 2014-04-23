@@ -136,10 +136,10 @@ def readLevel():
     GPIO.setwarnings(False)
 
     # declare pin names
-    CLK = 18
-    DIN = 24
-    CS = 21
-    DOUT = 23
+    CLK = 26
+    DIN = 21
+    CS = 19
+    DOUT = 24
     
     # max digital output of sensor
 #    DOUT_MAX = 1024.0

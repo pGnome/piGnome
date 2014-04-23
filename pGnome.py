@@ -14,8 +14,8 @@ myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 #GPIO settings#
 
 #PINOUT NUMBER#
-pumpOut = 12
-zone1 = 11
+pumpOut = 16
+zone1 = 12
 zone2 = 13
 zone3 = 15
 gpio_pins = [pumpOut,zone1,zone2,zone3]
