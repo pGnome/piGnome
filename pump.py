@@ -76,7 +76,7 @@ def pump_sig(identifier,gpio_pins):
 
 	#print identifier
 
-def pump_override():
+def pump_override(identifier,txt=''):
 	water_levelRead_new.readLevel()
 	if globalVals.waterLevel < globalVals.waterLevelThreshold:
 		GPIO.output(gpio_pins[0], GPIO.LOW)
