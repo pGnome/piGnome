@@ -128,10 +128,11 @@ def data_water_collect(identifier, txt=''):
 
 	while True:
 		try:
-			if row_water_count(cur)[0] == 0:
-				insert_water_db(cur, water)
-			else:
-				update_water_db(cur, water)
+			insert_water_db(cur, water)
+			# if row_water_count(cur)[0] == 0:
+			# 	insert_water_db(cur, water)
+			# else:
+			# 	update_water_db(cur, water)
 			break
 		except Exception:
 			unlock_db("myDBfile.sqlite3")
