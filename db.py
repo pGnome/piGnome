@@ -60,8 +60,7 @@ def insert_db(cur, MoistureLevel, GnomeZone):
 	cur.execute('''INSERT INTO pGnome
 		(RecordId, MoistureLevel, GnomeZone, CollectedTime)
 		VALUES (NULL,?,?,?)''', (MoistureLevel, GnomeZone, datetime.now()- timedelta(hours=4)))
-	print "GnomeZone:"
-	print GnomeZone
+
 #main method to collect current mositure level data#
 def data_collect(identifier, txt=''):
 	unlock_db("myDBfile.sqlite3")
@@ -125,7 +124,7 @@ def data_water_collect(identifier, txt=''):
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
 	water = water_levelRead_new.readLevel()
-	print water
+	print "current water level reading: ", water
 
 	if water != -1:
 		while True:
@@ -181,11 +180,11 @@ def moisture_setting(identifier, txt=''):
 						insert_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
 					else:
 						update_setting_db(cur,ob.level,ob.createdAt,ob.gnomeZone)
-					cur.execute('''SELECT *
-						FROM levelSet
-						''')
-					for record in cur.fetchall():
-						print record
+					# cur.execute('''SELECT *
+					# 	FROM levelSet
+					# 	''')
+					# for record in cur.fetchall():
+					# 	print record
 					break
 				except Exception:
 					unlock_db("myDBfile.sqlite3")
@@ -209,8 +208,9 @@ def update_remote_db(identifier,txt=''):
 		try:
 			cur.execute('''SELECT *
 				FROM pGnome
+				ORDER BY RecordId DESC
 				''')
-			moistureRecords = cur.fetchall()
+			moistureRecords = cur.fetchone()
 			cur.execute('''SELECT *
 				FROM waterLevel
 				''')
