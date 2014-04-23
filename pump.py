@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 import globalVals
 import weather
 import schedule
-import water_levelRead
+import water_levelRead_new
 
 def pump_sig(identifier,gpio_pins):
 
@@ -77,7 +77,7 @@ def pump_sig(identifier,gpio_pins):
 	#print identifier
 
 def pump_override():
-	water_levelRead.readLevel()
+	water_levelRead_new.readLevel()
 	if globalVals.waterLevel < globalVals.waterLevelThreshold:
 		GPIO.output(gpio_pins[0], GPIO.LOW)
 		GPIO.output(gpio_pins[1], GPIO.HIGH)

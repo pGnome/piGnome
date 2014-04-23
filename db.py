@@ -9,7 +9,7 @@ import sqlite3
 import dateutil.parser as parser
 import time
 #import water level functions
-import water_levelRead
+import water_levelRead_new
 
 
 #connect to the parse database#
@@ -124,7 +124,7 @@ def data_water_collect(identifier, txt=''):
 	#connect to the local database#
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
-	water = water_levelRead.readLevel()
+	water = water_levelRead_new.readLevel()
 
 	while True:
 		try:

@@ -28,4 +28,4 @@ def init():
 
     #Water level threshold
     global waterLevelThreshold
-    waterLevelThreshold = 20
+    waterLevelThreshold = 15.75
