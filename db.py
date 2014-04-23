@@ -143,6 +143,7 @@ def data_water_collect(identifier, txt=''):
 		myDatabase.rollback()
 
 	print "data_water_collect"
+	print water
 
 
 ###### MOISTURE SETTING ######

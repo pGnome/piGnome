@@ -85,6 +85,7 @@ def pump_override():
 		GPIO.output(gpio_pins[3], GPIO.HIGH)
 		globalVals.pumpOn = False
 		print "turning pump off"
+	print "pump_override"
 
 def unlock_db(db_filename):
     connection = sqlite3.connect(db_filename)
