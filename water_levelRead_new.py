@@ -170,8 +170,6 @@ def readLevel():
 
         time.sleep(0.5) 
 
-        print "Inserting: ", n
-
         d_level.insert( n )
         
 

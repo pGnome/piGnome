@@ -29,3 +29,13 @@ def init():
     #Water level threshold
     global waterLevelThreshold
     waterLevelThreshold = 17
+
+    #PINOUT NUMBER#
+    global pumpOut
+    pumpOut = 12
+    global zone1
+    zone1 = 11
+    global zone2
+    zone2 = 13
+    global zone3
+    zone3 = 15
