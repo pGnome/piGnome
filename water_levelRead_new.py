@@ -183,7 +183,11 @@ def readLevel():
 
     level = depth2percent( resist2depth( voltage2resist( digit2analog( raw ) ) ) )
 
-    globalVals.waterLevel = level
+    if level > 0 and level < 100:
+        globalVals.waterLevel = level
+    else:
+        globalVals.waterLevel = -1
+        level = -1
 
     return level
         
