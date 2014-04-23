@@ -33,6 +33,7 @@ def isRaining():
 		lng = ob.lon
 	forecast = forecastio.load_forecast(api_key, lat, lng, units="us")
 	weatherData = forecast.hourly()
+	print weatherData.icon.encode('utf8')
 	if weatherData.icon.encode('utf8') == "rain":
 		return True
 	else:
