@@ -10,6 +10,8 @@ import dateutil.parser as parser
 import time
 #import water level functions
 import water_levelRead_new
+import globalVals
+
 
 
 #connect to the parse database#
@@ -171,7 +173,7 @@ def moisture_setting(identifier, txt=''):
 	myDatabase = sqlite3.connect("myDBfile.sqlite3", check_same_thread=False)
 	cur = myDatabase.cursor()
 	for GnomeZone in range (1,4):
-		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).order_by("-createdAt")
+		recentSet = MoistureSetting.Query.filter(gnomeZone=GnomeZone).filter(user=globalVals.userID).order_by("-createdAt")
 		recentOne = recentSet.limit(1)
 		for ob in recentOne:
 			while True:
@@ -216,11 +218,11 @@ def update_remote_db(identifier,txt=''):
 				''')
 			waterLevels = cur.fetchall()
 			for record in moistureRecords:
-				gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3])
+				gnomeScore = Moisture(level=record[1], gnomeZone=int(record[2]), collectedTime=record[3], user=globalVals.userID)
 				gnomeScore.save()
 				print record
 			for record in waterLevels:
-				gnomeScore = Barrel(level=record[1], collectedTime=record[2])
+				gnomeScore = Barrel(level=record[1], collectedTime=record[2], user=globalVals.userID)
 				gnomeScore.save()
 				print record
 			break

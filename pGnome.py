@@ -53,7 +53,7 @@ def intervalExecute(interval, func, *args, **argd):
             func(*args, **argd) #: could be a lenthy operation
     th = threading.Thread(target=threadProc, args=args, kwargs=argd)
     th.start()
-    def close(block=True, timeout=3):
+    def close(block=True, timeout=5):
         ''' @param block: if True, block the caller until the thread 
                           is closed or time out
             @param timout: if blocked, timeout is used
@@ -78,7 +78,7 @@ if __name__=='__main__':
     globalVals.init()
 
     data_Collect = intervalExecute(1.0, db.data_collect, 1, 'data_collect')
-    moisture_Setting = intervalExecute(1.0, db.moisture_setting, 2, 'moisture_setting')
+    moisture_Setting = intervalExecute(3.0, db.moisture_setting, 2, 'moisture_setting')
     sync_DB = intervalExecute(60.0, db.update_remote_db, 3, 'update_remote_db')
     pump_Trigger = intervalExecute(5.0, pump.pump_sig, 4, gpio_pins)
     water_Level = intervalExecute(10.0, db.data_water_collect, 5, 'data_water_collect')

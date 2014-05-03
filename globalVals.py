@@ -34,3 +34,6 @@ def init():
     global isSent
     isSent = False
 
+    global userID
+    userID = "I7Ecablaro"
+

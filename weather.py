@@ -26,7 +26,7 @@ def isRaining():
 	print "testing weather"
 	lat = 0
 	lng = 0
-	recentSet = Location.Query.all().order_by("-createdAt")
+	recentSet = Location.Query.filter(user=globalVals.userID).order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 	for ob in recentOne:
 		lat = ob.lat
@@ -41,7 +41,7 @@ def isRaining():
 
 #method for retrieving today's watering schedule
 def getTodayScheduleTime(day):
-	recentSet = Schedule.Query.filter(day=day).order_by("-createdAt")
+	recentSet = Schedule.Query.filter(day=day).filter(user=globalVals.userID).order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 	scheduleTime = ""
 	duration = 1.0
@@ -53,7 +53,7 @@ def getTodayScheduleTime(day):
 
 #method to update if the manual override is on
 def updateManual():
-	recentSet = Manual.Query.all().order_by("-createdAt")
+	recentSet = Manual.Query.filter(user=globalVals.userID).order_by("-createdAt")
 	recentOne = recentSet.limit(1)
 	for ob in recentOne:
 		globalVals.manual = ob.override
