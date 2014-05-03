@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+u#!/usr/bin/env python
 import time
 import os
 import RPi.GPIO as GPIO
@@ -136,7 +136,7 @@ def readLevel():
     GPIO.setwarnings(False)
 
     # declare pin names
-    CLK = 18
+    CLK = 2
     DIN = 24
     CS = 21
     DOUT = 23
@@ -168,17 +168,26 @@ def readLevel():
         
         n = read_adc(CLK, DIN, CS, DOUT)
 
-#        print "Inserting: ", n
+        time.sleep(0.5) 
 
         d_level.insert( n )
         
 
-        time.sleep(0.3)    # sleep for a milli sec
+        #time.sleep(0.5)    # sleep for a milli sec
 
+    raw = d_level.average()
 
-    level = depth2percent( resist2depth( voltage2resist( digit2analog( d_level.average() ) ) ) )
+    print "raw averate: ", raw
 
-    globalVals.waterLevel = level
+    level = depth2percent( resist2depth( voltage2resist( digit2analog( raw ) ) ) )
+
+    if level > 0 and level < 100:
+        globalVals.waterLevel = level
+    else:
+        level = -1
+
+    if level > (globalVals.waterLevelThreshold + 5):
+        globalVals.isSent = False
 
     return level
         
